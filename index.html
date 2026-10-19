@@ -2,673 +2,955 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Country Simulator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Empire Forge – Country Simulator</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Rajdhani:wght@500;600&display=swap');
+
+  :root {
+    --bg: #070b14;
+    --panel: rgba(16, 22, 36, 0.85);
+    --accent: #4fc3f7;
+    --accent2: #81c784;
+    --danger: #ef5350;
+    --warn: #ffb74d;
+    --text: #e8eef7;
+    --muted: #8b9bb4;
+  }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    background: #0f0f1a;
-    color: #e0e0e0;
-    font-family: system-ui, -apple-system, sans-serif;
-    display: flex;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', system-ui, sans-serif;
     height: 100vh;
     overflow: hidden;
+    display: flex;
   }
-  #game-area {
+
+  #map-container {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     position: relative;
+    overflow: hidden;
+    background: #02060e;
   }
-  canvas {
-    background: #1a1a2e;
-    border: 2px solid #333;
-    cursor: crosshair;
-    max-width: 100%;
-    max-height: 90vh;
+
+  canvas#game {
+    display: block;
+    cursor: grab;
   }
+  canvas#game:active { cursor: grabbing; }
+
+  /* ===== SIDEBAR ===== */
   #sidebar {
-    width: 280px;
-    background: #16162a;
-    border-left: 2px solid #333;
-    padding: 16px;
-    overflow-y: auto;
+    width: 320px;
+    background: var(--panel);
+    backdrop-filter: blur(12px);
+    border-left: 1px solid rgba(79, 195, 247, 0.15);
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    padding: 16px;
+    gap: 14px;
+    overflow-y: auto;
+    z-index: 20;
   }
-  h2 { font-size: 1.1rem; color: #7eb8ff; margin-bottom: 4px; }
-  .stat { font-size: 0.95rem; }
-  .stat span { color: #fff; font-weight: 600; }
-  button {
-    background: #2a4a7a;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: background 0.15s;
-  }
-  button:hover { background: #3a5a9a; }
-  button:disabled { background: #444; cursor: not-allowed; opacity: 0.6; }
-  .btn-danger { background: #8a2a2a; }
-  .btn-danger:hover { background: #aa3a3a; }
-  .btn-success { background: #2a7a4a; }
-  .btn-success:hover { background: #3a9a5a; }
+
   .panel {
-    background: #1e1e35;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #333;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 12px 14px;
   }
-  .nation-list { display: flex; flex-direction: column; gap: 6px; }
-  .nation-row {
+
+  h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    color: var(--accent);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.05rem;
+    margin: 3px 0;
+  }
+  .stat-row span:last-child { font-weight: 600; color: #fff; }
+
+  button {
+    width: 100%;
+    padding: 9px 12px;
+    margin-top: 6px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: linear-gradient(135deg, #1e3a5f, #2a4a7a);
+    color: white;
+  }
+  button:hover { filter: brightness(1.15); transform: translateY(-1px); }
+  button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .btn-green { background: linear-gradient(135deg, #1b5e20, #2e7d32); }
+  .btn-red { background: linear-gradient(135deg, #b71c1c, #c62828); }
+  .btn-gold { background: linear-gradient(135deg, #e65100, #ef6c00); }
+
+  .nation-item {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 0.85rem;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 0.9rem;
   }
-  .color-box {
-    width: 14px; height: 14px;
+  .nation-item:last-child { border-bottom: none; }
+  .swatch {
+    width: 12px; height: 12px;
     border-radius: 3px;
-    border: 1px solid #555;
+    flex-shrink: 0;
   }
+
   #log {
     flex: 1;
-    min-height: 120px;
-    max-height: 200px;
+    min-height: 140px;
+    max-height: 220px;
     overflow-y: auto;
     font-size: 0.8rem;
-    background: #111;
-    padding: 8px;
-    border-radius: 6px;
-    border: 1px solid #333;
+    line-height: 1.35;
   }
-  .log-entry { margin-bottom: 4px; opacity: 0.9; }
-  .log-war { color: #ff6b6b; }
-  .log-ally { color: #6bffb8; }
-  .log-build { color: #ffd56b; }
-  #selected-info { min-height: 60px; }
-  .hint { font-size: 0.75rem; color: #888; margin-top: 4px; }
+  .log-line { margin-bottom: 4px; opacity: 0.9; }
+  .log-war { color: #ef9a9a; }
+  .log-ally { color: #a5d6a7; }
+  .log-eco { color: #ffe082; }
+  .log-sys { color: var(--muted); }
+
+  /* Floating income numbers */
+  .float-text {
+    position: absolute;
+    pointer-events: none;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-shadow: 0 0 6px currentColor;
+    animation: floatUp 1.2s forwards;
+    z-index: 50;
+  }
+  @keyframes floatUp {
+    0% { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-40px) scale(1.2); }
+  }
+
+  /* Top bar */
+  #topbar {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    display: flex;
+    gap: 10px;
+    z-index: 15;
+    pointer-events: none;
+  }
+  .top-chip {
+    background: rgba(10,15,25,0.75);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(79,195,247,0.2);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 0.9rem;
+    pointer-events: auto;
+  }
+
+  #minimap {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    width: 160px;
+    height: 100px;
+    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(79,195,247,0.3);
+    border-radius: 8px;
+    z-index: 15;
+  }
+
+  .hint {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 4px;
+  }
 </style>
 </head>
 <body>
 
-<div id="game-area">
-  <canvas id="c" width="800" height="600"></canvas>
+<div id="map-container">
+  <canvas id="game"></canvas>
+  <canvas id="minimap" width="160" height="100"></canvas>
+
+  <div id="topbar">
+    <div class="top-chip">💰 <span id="top-money">0</span></div>
+    <div class="top-chip">⚔️ <span id="top-troops">0</span></div>
+    <div class="top-chip">🌍 <span id="top-land">0</span> tiles</div>
+    <div class="top-chip" style="margin-left:auto">Drag = Pan · Scroll = Zoom · Click own tile → Click target = Attack</div>
+  </div>
 </div>
 
 <div id="sidebar">
   <div class="panel">
-    <h2>Your Nation</h2>
-    <div class="stat">Money: <span id="money">0</span></div>
-    <div class="stat">Troops: <span id="troops">0</span></div>
-    <div class="stat">Land: <span id="land">0</span></div>
+    <h2>Empire Control</h2>
+    <div class="stat-row"><span>Treasury</span><span id="money">0</span></div>
+    <div class="stat-row"><span>Manpower</span><span id="troops">0</span></div>
+    <div class="stat-row"><span>Territory</span><span id="land">0</span></div>
+    <div class="stat-row"><span>Income /s</span><span id="income">0</span></div>
   </div>
 
   <div class="panel">
-    <h2>Actions</h2>
-    <button id="btn-recruit" onclick="recruit()">Recruit Troops (100¢)</button>
-    <button id="btn-farm" onclick="build('farm')" style="margin-top:6px">Build Farm (150¢)</button>
-    <button id="btn-barracks" onclick="build('barracks')" style="margin-top:6px">Build Barracks (250¢)</button>
+    <h2>Construction</h2>
+    <button class="btn-green" onclick="build('farm')">🌾 Farm — 180¢ (income)</button>
+    <button class="btn-gold" onclick="build('mine')">⛏️ Mine — 220¢ (income)</button>
+    <button onclick="build('barracks')">🏰 Barracks — 300¢ (troops)</button>
+    <button onclick="build('city')">🏙️ City — 450¢ (big income)</button>
     <div class="hint">Select one of your tiles first</div>
   </div>
 
-  <div class="panel" id="selected-info">
-    <h2>Selected Tile</h2>
-    <div id="tile-details">Click a tile</div>
+  <div class="panel">
+    <h2>Military</h2>
+    <button onclick="recruit(5)">Recruit 5 troops — 80¢</button>
+    <button onclick="recruit(15)">Recruit 15 troops — 200¢</button>
+  </div>
+
+  <div class="panel">
+    <h2>Selected</h2>
+    <div id="sel-info" style="font-size:0.9rem; line-height:1.4">Click any tile</div>
   </div>
 
   <div class="panel">
     <h2>Diplomacy</h2>
-    <div id="diplomacy" class="nation-list"></div>
+    <div id="diplo"></div>
   </div>
 
   <div class="panel">
-    <h2>Nations</h2>
-    <div id="nations-list" class="nation-list"></div>
+    <h2>World Powers</h2>
+    <div id="nations"></div>
   </div>
 
   <div class="panel" style="flex:1; display:flex; flex-direction:column;">
-    <h2>Event Log</h2>
+    <h2>Events</h2>
     <div id="log"></div>
   </div>
 </div>
 
 <script>
-// ===================== CONFIG =====================
-const TILE = 20;
-const COLS = 40;
-const ROWS = 30;
-const PLAYER_ID = 1;
+// ======================================================
+// EMPIRE FORGE - Cooler Country Simulator
+// ======================================================
 
-const COLORS = {
-  0: '#1a2a3a',      // water / empty
-  1: '#4a90e2',      // player
-  2: '#e24a4a',      // red AI
-  3: '#4ae24a',      // green AI
-  4: '#e2a04a'       // orange AI
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+const minimap = document.getElementById('minimap');
+const mctx = minimap.getContext('2d');
+
+let W, H;
+function resize() {
+  W = canvas.width = document.getElementById('map-container').clientWidth;
+  H = canvas.height = document.getElementById('map-container').clientHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+// -------- CONFIG --------
+const COLS = 80;
+const ROWS = 50;
+const BASE_TILE = 18;
+
+const NATION_COLORS = {
+  0: null,
+  1: { fill: '#2196f3', glow: '#64b5f6', name: 'Azure Federation' },
+  2: { fill: '#f44336', glow: '#e57373', name: 'Crimson Imperium' },
+  3: { fill: '#4caf50', glow: '#81c784', name: 'Verdant Concord' },
+  4: { fill: '#ff9800', glow: '#ffb74d', name: 'Solar Dynasty' },
+  5: { fill: '#9c27b0', glow: '#ba68c8', name: 'Amethyst Realm' }
 };
 
-const NAMES = {
-  1: "Blue Republic",
-  2: "Crimson Empire",
-  3: "Emerald League",
-  4: "Sunset Kingdom"
-};
-
-// ===================== STATE =====================
-let map = [];          // map[y][x] = { owner, building, troops }
+// -------- STATE --------
+let map = [];
 let nations = {};
-let selected = null;   // {x, y}
-let attackFrom = null; // for two-click attack
+let camera = { x: 0, y: 0, zoom: 1 };
+let selected = null;
+let attackFrom = null;
+let particles = [];
+let floatingTexts = [];
+let animTroops = []; // marching armies
+let shake = 0;
 let tick = 0;
+let isDragging = false;
+let lastMouse = {x:0,y:0};
 
-// ===================== INIT =====================
-function init() {
-  // create empty map
-  map = Array.from({length: ROWS}, () =>
-    Array.from({length: COLS}, () => ({ owner: 0, building: null, troops: 0 }))
-  );
+// -------- INIT MAP (stylized continents) --------
+function noise(x, y) {
+  // simple value noise
+  const n = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453;
+  return n - Math.floor(n);
+}
 
-  // place water borders
+function generateWorld() {
+  map = [];
   for (let y = 0; y < ROWS; y++) {
+    map[y] = [];
     for (let x = 0; x < COLS; x++) {
-      if (x === 0 || y === 0 || x === COLS-1 || y === ROWS-1) {
-        map[y][x].owner = -1; // water
-      }
+      // create continent shapes
+      const nx = x / COLS - 0.5;
+      const ny = y / ROWS - 0.5;
+      let elev = 0;
+
+      // main continents
+      elev += Math.exp(-((nx+0.25)**2 + (ny+0.1)**2) * 8) * 1.2;   // west
+      elev += Math.exp(-((nx-0.2)**2 + (ny+0.05)**2) * 7) * 1.1;    // center
+      elev += Math.exp(-((nx-0.35)**2 + (ny-0.25)**2) * 10) * 0.9;  // east-south
+      elev += Math.exp(-((nx+0.1)**2 + (ny-0.3)**2) * 12) * 0.7;    // south
+
+      elev += (noise(x*0.15, y*0.15) - 0.5) * 0.35;
+      elev += (noise(x*0.4, y*0.4) - 0.5) * 0.15;
+
+      let type = 'ocean';
+      if (elev > 0.32) type = 'land';
+      if (elev > 0.55) type = 'mountain';
+      if (elev > 0.38 && elev < 0.48 && noise(x*0.3,y*0.3) > 0.6) type = 'forest';
+
+      map[y][x] = {
+        owner: 0,
+        type,
+        building: null,
+        troops: 0,
+        elev
+      };
     }
   }
 
-  // nations
-  nations = {
-    1: { id:1, name:NAMES[1], money:800, troops:40, allies:[], atWar:[], color:COLORS[1] },
-    2: { id:2, name:NAMES[2], money:600, troops:30, allies:[], atWar:[], color:COLORS[2] },
-    3: { id:3, name:NAMES[3], money:600, troops:30, allies:[], atWar:[], color:COLORS[3] },
-    4: { id:4, name:NAMES[4], money:600, troops:30, allies:[], atWar:[], color:COLORS[4] }
-  };
+  // seed nations on good land
+  const starts = [
+    {id:1, x:18, y:18},
+    {id:2, x:48, y:14},
+    {id:3, x:22, y:32},
+    {id:4, x:55, y:28},
+    {id:5, x:38, y:22}
+  ];
 
-  // starting territories
-  seedNation(1, 8, 12, 4);
-  seedNation(2, 28, 8, 3);
-  seedNation(3, 10, 22, 3);
-  seedNation(4, 30, 22, 3);
-
-  log("Game started. Expand, build, and form alliances!", "normal");
-  updateUI();
-  draw();
-  setInterval(gameTick, 1000); // economy + AI every second
-}
-
-function seedNation(id, cx, cy, size) {
-  for (let dy = -size; dy <= size; dy++) {
-    for (let dx = -size; dx <= size; dx++) {
-      const x = cx + dx, y = cy + dy;
-      if (x > 0 && y > 0 && x < COLS-1 && y < ROWS-1) {
-        if (Math.abs(dx) + Math.abs(dy) <= size) {
-          map[y][x].owner = id;
-          if (dx === 0 && dy === 0) map[y][x].building = 'capital';
+  starts.forEach(s => {
+    for (let dy = -3; dy <= 3; dy++) {
+      for (let dx = -3; dx <= 3; dx++) {
+        const x = s.x + dx, y = s.y + dy;
+        if (x>1 && y>1 && x<COLS-2 && y<ROWS-2 && map[y][x].type !== 'ocean') {
+          if (Math.abs(dx)+Math.abs(dy) <= 3) {
+            map[y][x].owner = s.id;
+            if (dx===0 && dy===0) {
+              map[y][x].building = 'capital';
+              map[y][x].troops = 12;
+            }
+          }
         }
       }
     }
+  });
+}
+
+// -------- NATIONS --------
+function initNations() {
+  nations = {};
+  for (let id = 1; id <= 5; id++) {
+    nations[id] = {
+      id,
+      name: NATION_COLORS[id].name,
+      money: id === 1 ? 1200 : 700 + Math.random()*400,
+      allies: [],
+      atWar: [],
+      color: NATION_COLORS[id]
+    };
   }
 }
 
-// ===================== DRAW =====================
-const canvas = document.getElementById('c');
-const ctx = canvas.getContext('2d');
-
-function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  for (let y = 0; y < ROWS; y++) {
-    for (let x = 0; x < COLS; x++) {
-      const cell = map[y][x];
-      let color = COLORS[0];
-      if (cell.owner === -1) color = '#0a1520';
-      else if (cell.owner > 0) color = COLORS[cell.owner];
-
-      ctx.fillStyle = color;
-      ctx.fillRect(x * TILE, y * TILE, TILE - 1, TILE - 1);
-
-      // building indicator
-      if (cell.building) {
-        ctx.fillStyle = cell.building === 'farm' ? '#8f8' :
-                        cell.building === 'barracks' ? '#f88' : '#ff0';
-        ctx.fillRect(x * TILE + 5, y * TILE + 5, 9, 9);
-      }
-
-      // troop count (small)
-      if (cell.troops > 0) {
-        ctx.fillStyle = '#fff';
-        ctx.font = '10px sans-serif';
-        ctx.fillText(cell.troops, x * TILE + 2, y * TILE + 12);
-      }
-    }
+// -------- CAMERA & INPUT --------
+canvas.addEventListener('mousedown', e => {
+  isDragging = true;
+  lastMouse = {x: e.clientX, y: e.clientY};
+});
+window.addEventListener('mouseup', () => isDragging = false);
+canvas.addEventListener('mousemove', e => {
+  if (isDragging) {
+    camera.x += (e.clientX - lastMouse.x) / camera.zoom;
+    camera.y += (e.clientY - lastMouse.y) / camera.zoom;
+    lastMouse = {x: e.clientX, y: e.clientY};
   }
-
-  // selection highlight
-  if (selected) {
-    ctx.strokeStyle = '#fff';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(selected.x * TILE, selected.y * TILE, TILE - 1, TILE - 1);
-  }
-  if (attackFrom) {
-    ctx.strokeStyle = '#ff0';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(attackFrom.x * TILE, attackFrom.y * TILE, TILE - 1, TILE - 1);
-  }
-
-  requestAnimationFrame(draw);
-}
-
-// ===================== INPUT =====================
-canvas.addEventListener('click', e => {
+});
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  const old = camera.zoom;
+  camera.zoom = Math.max(0.35, Math.min(2.8, camera.zoom - e.deltaY * 0.001));
+  // zoom toward mouse
   const rect = canvas.getBoundingClientRect();
-  const scaleX = canvas.width / rect.width;
-  const scaleY = canvas.height / rect.height;
-  const x = Math.floor((e.clientX - rect.left) * scaleX / TILE);
-  const y = Math.floor((e.clientY - rect.top) * scaleY / TILE);
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+  camera.x -= (mx / old - mx / camera.zoom);
+  camera.y -= (my / old - my / camera.zoom);
+});
 
-  if (x < 0 || y < 0 || x >= COLS || y >= ROWS) return;
-  const cell = map[y][x];
+canvas.addEventListener('click', e => {
+  if (Math.abs(e.clientX - lastMouse.x) > 4 || Math.abs(e.clientY - lastMouse.y) > 4) return;
 
-  // first click: select own tile or start attack
+  const rect = canvas.getBoundingClientRect();
+  const mx = (e.clientX - rect.left) / camera.zoom - camera.x;
+  const my = (e.clientY - rect.top) / camera.zoom - camera.y;
+  const tx = Math.floor(mx / BASE_TILE);
+  const ty = Math.floor(my / BASE_TILE);
+
+  if (tx < 0 || ty < 0 || tx >= COLS || ty >= ROWS) return;
+  const cell = map[ty][tx];
+
   if (!attackFrom) {
-    if (cell.owner === PLAYER_ID) {
-      selected = {x, y};
-      attackFrom = {x, y};
-      updateSelectedInfo();
-    } else {
-      selected = {x, y};
-      attackFrom = null;
-      updateSelectedInfo();
-    }
+    selected = {x: tx, y: ty};
+    if (cell.owner === 1) attackFrom = {x: tx, y: ty};
+    else attackFrom = null;
   } else {
-    // second click: try to attack / move
-    if (x === attackFrom.x && y === attackFrom.y) {
-      // cancel
+    if (tx === attackFrom.x && ty === attackFrom.y) {
       attackFrom = null;
-      selected = {x, y};
-    } else if (isAdjacent(attackFrom.x, attackFrom.y, x, y)) {
-      attemptAttack(attackFrom.x, attackFrom.y, x, y);
+    } else if (isAdj(attackFrom.x, attackFrom.y, tx, ty)) {
+      doAttack(attackFrom.x, attackFrom.y, tx, ty);
       attackFrom = null;
+    } else if (cell.owner === 1) {
+      attackFrom = {x: tx, y: ty};
+      selected = {x: tx, y: ty};
     } else {
-      // reselect
-      if (cell.owner === PLAYER_ID) {
-        attackFrom = {x, y};
-        selected = {x, y};
-      } else {
-        attackFrom = null;
-        selected = {x, y};
-      }
+      attackFrom = null;
+      selected = {x: tx, y: ty};
     }
-    updateSelectedInfo();
   }
   updateUI();
 });
 
-function isAdjacent(x1, y1, x2, y2) {
-  return Math.abs(x1 - x2) + Math.abs(y1 - y2) === 1;
+function isAdj(x1,y1,x2,y2) {
+  return Math.abs(x1-x2) + Math.abs(y1-y2) === 1;
 }
 
-// ===================== COMBAT =====================
-function attemptAttack(fx, fy, tx, ty) {
+// -------- COMBAT + ANIMATION --------
+function doAttack(fx, fy, tx, ty) {
   const from = map[fy][fx];
   const to = map[ty][tx];
-
-  if (from.owner !== PLAYER_ID || from.troops < 1) {
-    log("Not enough troops on that tile.", "normal");
+  if (from.owner !== 1 || from.troops < 1) {
+    log("No troops on selected tile.", "sys");
     return;
   }
-
-  // can't attack allies
-  if (to.owner > 0 && nations[PLAYER_ID].allies.includes(to.owner)) {
-    log("You are allied with them!", "ally");
+  if (to.owner > 0 && nations[1].allies.includes(to.owner)) {
+    log("Cannot attack an ally!", "sys");
     return;
   }
+  if (to.type === 'ocean') return;
 
-  // declare war if needed
-  if (to.owner > 0 && !nations[PLAYER_ID].atWar.includes(to.owner)) {
-    declareWar(PLAYER_ID, to.owner);
+  if (to.owner > 0 && !nations[1].atWar.includes(to.owner)) {
+    declareWar(1, to.owner);
   }
 
-  const attackers = from.troops;
-  let defenders = to.troops;
+  const send = from.troops;
+  from.troops = 0;
 
-  // fort bonus
-  if (to.building === 'barracks' || to.building === 'capital') defenders += 8;
-  if (to.building === 'farm') defenders += 3;
+  // animate march
+  animTroops.push({
+    x: fx, y: fy,
+    tx, ty,
+    progress: 0,
+    troops: send,
+    owner: 1,
+    targetOwner: to.owner
+  });
+}
 
-  // simple combat
-  const attackPower = attackers * (0.8 + Math.random() * 0.4);
-  const defensePower = defenders * (0.9 + Math.random() * 0.3);
+function resolveCombat(atx, aty, troops, attackerId, defenderId) {
+  const cell = map[aty][atx];
+  let def = cell.troops;
+  if (cell.building === 'barracks' || cell.building === 'capital') def += 10;
+  if (cell.building === 'city') def += 6;
 
-  if (attackPower > defensePower) {
-    // victory
-    const losses = Math.floor(defenders * 0.6 + Math.random() * 5);
-    from.troops = Math.max(0, attackers - losses);
-    to.owner = PLAYER_ID;
-    to.troops = Math.max(1, Math.floor(from.troops * 0.4));
-    from.troops = Math.max(0, from.troops - to.troops);
-    to.building = to.building === 'capital' ? null : to.building; // capital falls
-    log(`You captured a tile! (${tx},${ty})`, "war");
+  const atkPower = troops * (0.85 + Math.random() * 0.4);
+  const defPower = def * (0.95 + Math.random() * 0.35);
+
+  // particles + shake
+  spawnCombatEffect(atx, aty);
+  shake = 8;
+
+  if (atkPower > defPower) {
+    const survivors = Math.max(1, Math.floor(troops * 0.45));
+    cell.owner = attackerId;
+    cell.troops = survivors;
+    if (cell.building === 'capital') cell.building = null;
+    log(`${nations[attackerId].name} captured territory!`, "war");
+    spawnFloat(atx, aty, "CAPTURED", "#81c784");
   } else {
-    // defeat
-    const losses = Math.floor(attackers * 0.7);
-    from.troops = Math.max(0, attackers - losses);
-    to.troops = Math.max(0, defenders - Math.floor(losses * 0.4));
-    log(`Attack failed. Lost ${losses} troops.`, "war");
+    cell.troops = Math.max(0, def - Math.floor(troops * 0.5));
+    log(`Attack repelled.`, "war");
+    spawnFloat(atx, aty, "REPELLED", "#ef5350");
   }
 
-  // allies may join
-  checkDefensivePacts(to.owner, PLAYER_ID);
+  if (defenderId > 0) checkDefensive(defenderId, attackerId);
 }
 
 function declareWar(a, b) {
   if (!nations[a].atWar.includes(b)) nations[a].atWar.push(b);
   if (!nations[b].atWar.includes(a)) nations[b].atWar.push(a);
-  // break alliance if any
-  nations[a].allies = nations[a].allies.filter(id => id !== b);
-  nations[b].allies = nations[b].allies.filter(id => id !== a);
+  nations[a].allies = nations[a].allies.filter(i => i !== b);
+  nations[b].allies = nations[b].allies.filter(i => i !== a);
   log(`${nations[a].name} declared war on ${nations[b].name}!`, "war");
 }
 
-function checkDefensivePacts(attacked, attacker) {
-  if (attacked <= 0) return;
-  nations[attacked].allies.forEach(allyId => {
-    if (!nations[allyId].atWar.includes(attacker)) {
-      declareWar(allyId, attacker);
-      log(`${nations[allyId].name} joins the war to defend their ally!`, "war");
+function checkDefensive(attacked, attacker) {
+  nations[attacked].allies.forEach(ally => {
+    if (!nations[ally].atWar.includes(attacker)) {
+      declareWar(ally, attacker);
+      log(`${nations[ally].name} honors defensive pact!`, "war");
     }
   });
 }
 
-// ===================== BUILDING & RECRUIT =====================
-function recruit() {
-  if (!selected) return log("Select one of your tiles first.", "normal");
-  const cell = map[selected.y][selected.x];
-  if (cell.owner !== PLAYER_ID) return log("You don't own that tile.", "normal");
-  if (nations[PLAYER_ID].money < 100) return log("Not enough money.", "normal");
-
-  nations[PLAYER_ID].money -= 100;
-  cell.troops += 5;
-  nations[PLAYER_ID].troops += 5;
-  log("Recruited 5 troops.", "build");
-  updateUI();
-}
-
+// -------- BUILD / RECRUIT --------
 function build(type) {
-  if (!selected) return log("Select one of your tiles first.", "normal");
-  const cell = map[selected.y][selected.x];
-  if (cell.owner !== PLAYER_ID) return log("You don't own that tile.", "normal");
-  if (cell.building) return log("Tile already has a building.", "normal");
+  if (!selected) return log("Select a tile first.", "sys");
+  const c = map[selected.y][selected.x];
+  if (c.owner !== 1) return log("Not your territory.", "sys");
+  if (c.building) return log("Already has a structure.", "sys");
 
-  const cost = type === 'farm' ? 150 : 250;
-  if (nations[PLAYER_ID].money < cost) return log("Not enough money.", "normal");
+  const costs = { farm:180, mine:220, barracks:300, city:450 };
+  const cost = costs[type];
+  if (nations[1].money < cost) return log("Insufficient funds.", "sys");
 
-  nations[PLAYER_ID].money -= cost;
-  cell.building = type;
-  log(`Built ${type} at (${selected.x},${selected.y})`, "build");
+  nations[1].money -= cost;
+  c.building = type;
+  log(`Constructed ${type}.`, "eco");
+  spawnFloat(selected.x, selected.y, type.toUpperCase(), "#ffb74d");
   updateUI();
 }
 
-// ===================== ECONOMY & AI TICK =====================
+function recruit(amount) {
+  if (!selected) return log("Select one of your tiles.", "sys");
+  const c = map[selected.y][selected.x];
+  if (c.owner !== 1) return log("Not your territory.", "sys");
+  const cost = amount === 5 ? 80 : 200;
+  if (nations[1].money < cost) return log("Insufficient funds.", "sys");
+
+  nations[1].money -= cost;
+  c.troops += amount;
+  log(`Recruited ${amount} troops.`, "eco");
+  spawnFloat(selected.x, selected.y, `+${amount}`, "#4fc3f7");
+  updateUI();
+}
+
+// -------- ECONOMY + AI --------
 function gameTick() {
   tick++;
 
-  // income for every nation
-  for (let id in nations) {
-    let income = 0;
-    let troopGen = 0;
-    let land = 0;
-
+  // income
+  for (let id = 1; id <= 5; id++) {
+    let inc = 0;
+    let man = 0;
     for (let y = 0; y < ROWS; y++) {
       for (let x = 0; x < COLS; x++) {
         const c = map[y][x];
-        if (c.owner == id) {
-          land++;
-          income += 2;
-          if (c.building === 'farm') income += 6;
-          if (c.building === 'barracks') troopGen += 1;
-          if (c.building === 'capital') income += 4;
+        if (c.owner === id) {
+          inc += 1.8;
+          if (c.building === 'farm') inc += 5;
+          if (c.building === 'mine') inc += 7;
+          if (c.building === 'city') inc += 12;
+          if (c.building === 'capital') inc += 6;
+          if (c.building === 'barracks') man += 0.7;
         }
       }
     }
-    nations[id].money += income;
-    // distribute new troops to capital or random owned tile
-    if (troopGen > 0) {
-      addTroopsToNation(+id, troopGen);
+    nations[id].money += inc;
+    if (id === 1) {
+      document.getElementById('income').textContent = Math.floor(inc);
+    }
+    if (man >= 1) {
+      addTroops(id, Math.floor(man));
     }
   }
 
-  // AI actions every 2 seconds
+  // AI
   if (tick % 2 === 0) {
-    for (let id of [2,3,4]) {
-      aiAct(id);
-    }
+    for (let id = 2; id <= 5; id++) aiTurn(id);
   }
 
   updateUI();
 }
 
-function addTroopsToNation(id, amount) {
-  // find a tile belonging to them
+function addTroops(id, n) {
   const tiles = [];
-  for (let y = 0; y < ROWS; y++)
-    for (let x = 0; x < COLS; x++)
+  for (let y=0;y<ROWS;y++)
+    for (let x=0;x<COLS;x++)
       if (map[y][x].owner === id) tiles.push({x,y});
-
-  if (tiles.length === 0) return;
-  const t = tiles[Math.floor(Math.random() * tiles.length)];
-  map[t.y][t.x].troops += amount;
-  nations[id].troops += amount;
+  if (!tiles.length) return;
+  const t = tiles[Math.floor(Math.random()*tiles.length)];
+  map[t.y][t.x].troops += n;
 }
 
-// ===================== SIMPLE AI =====================
-function aiAct(id) {
+function aiTurn(id) {
   const n = nations[id];
-  if (n.money < 50) return;
-
-  // find owned tiles
   const owned = [];
-  for (let y = 0; y < ROWS; y++)
-    for (let x = 0; x < COLS; x++)
+  for (let y=0;y<ROWS;y++)
+    for (let x=0;x<COLS;x++)
       if (map[y][x].owner === id) owned.push({x,y});
+  if (!owned.length) return;
 
-  if (owned.length === 0) return;
-
-  // 40% chance build
-  if (Math.random() < 0.4 && n.money >= 150) {
-    const t = owned[Math.floor(Math.random() * owned.length)];
-    const cell = map[t.y][t.x];
-    if (!cell.building) {
-      if (n.money >= 250 && Math.random() < 0.4) {
-        cell.building = 'barracks';
-        n.money -= 250;
-      } else {
-        cell.building = 'farm';
-        n.money -= 150;
-      }
+  // build
+  if (n.money > 200 && Math.random() < 0.35) {
+    const t = owned[Math.floor(Math.random()*owned.length)];
+    const c = map[t.y][t.x];
+    if (!c.building) {
+      const r = Math.random();
+      if (r < 0.35 && n.money >= 180) { c.building = 'farm'; n.money -= 180; }
+      else if (r < 0.55 && n.money >= 220) { c.building = 'mine'; n.money -= 220; }
+      else if (r < 0.75 && n.money >= 300) { c.building = 'barracks'; n.money -= 300; }
+      else if (n.money >= 450) { c.building = 'city'; n.money -= 450; }
     }
   }
 
-  // 50% chance expand / attack
-  if (Math.random() < 0.55) {
-    // pick a border tile
-    const borders = [];
+  // expand / attack
+  if (Math.random() < 0.6) {
+    const candidates = [];
     owned.forEach(t => {
       [[0,1],[1,0],[0,-1],[-1,0]].forEach(([dx,dy]) => {
-        const nx = t.x + dx, ny = t.y + dy;
-        if (nx > 0 && ny > 0 && nx < COLS-1 && ny < ROWS-1) {
-          const target = map[ny][nx];
-          if (target.owner !== id && target.owner !== -1) {
-            // don't attack allies
-            if (target.owner === 0 || !n.allies.includes(target.owner)) {
-              borders.push({from: t, to: {x:nx, y:ny}});
-            }
+        const nx = t.x+dx, ny = t.y+dy;
+        if (nx>0 && ny>0 && nx<COLS-1 && ny<ROWS-1) {
+          const tc = map[ny][nx];
+          if (tc.type !== 'ocean' && tc.owner !== id &&
+              (tc.owner === 0 || !n.allies.includes(tc.owner))) {
+            candidates.push({from:t, to:{x:nx,y:ny}});
           }
         }
       });
     });
+    if (candidates.length) {
+      const m = candidates[Math.floor(Math.random()*candidates.length)];
+      const fc = map[m.from.y][m.from.x];
+      if (fc.troops >= 4) {
+        const send = Math.min(fc.troops, 5 + Math.floor(Math.random()*8));
+        fc.troops -= send;
+        animTroops.push({
+          x: m.from.x, y: m.from.y,
+          tx: m.to.x, ty: m.to.y,
+          progress: 0,
+          troops: send,
+          owner: id,
+          targetOwner: map[m.to.y][m.to.x].owner
+        });
+      }
+    }
+  }
+}
 
-    if (borders.length > 0) {
-      const move = borders[Math.floor(Math.random() * borders.length)];
-      const fromCell = map[move.from.y][move.from.x];
-      if (fromCell.troops >= 3) {
-        // move some troops and attack
-        const send = Math.min(fromCell.troops, 4 + Math.floor(Math.random() * 6));
-        fromCell.troops -= send;
+// -------- EFFECTS --------
+function spawnCombatEffect(tx, ty) {
+  for (let i = 0; i < 14; i++) {
+    particles.push({
+      x: (tx + 0.5) * BASE_TILE,
+      y: (ty + 0.5) * BASE_TILE,
+      vx: (Math.random()-0.5)*4,
+      vy: (Math.random()-0.5)*4,
+      life: 30 + Math.random()*20,
+      color: Math.random() > 0.5 ? '#ff7043' : '#ffca28'
+    });
+  }
+}
 
-        const toCell = map[move.to.y][move.to.x];
-        if (toCell.owner === 0) {
-          // claim neutral
-          toCell.owner = id;
-          toCell.troops = send;
-        } else {
-          // combat
-          if (!n.atWar.includes(toCell.owner)) declareWar(id, toCell.owner);
-          const def = toCell.troops + (toCell.building ? 5 : 0);
-          if (send * (0.8 + Math.random()*0.5) > def) {
-            toCell.owner = id;
-            toCell.troops = Math.max(1, Math.floor(send * 0.5));
-            toCell.building = toCell.building === 'capital' ? null : toCell.building;
-          } else {
-            // fail – troops lost
-          }
+function spawnFloat(tx, ty, text, color) {
+  floatingTexts.push({
+    x: (tx + 0.5) * BASE_TILE,
+    y: (ty + 0.3) * BASE_TILE,
+    text, color,
+    life: 60
+  });
+}
+
+// -------- RENDER --------
+function render() {
+  ctx.save();
+  // screen shake
+  if (shake > 0) {
+    ctx.translate((Math.random()-0.5)*shake, (Math.random()-0.5)*shake);
+    shake *= 0.9;
+  }
+
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#02060e';
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.translate(camera.x * camera.zoom, camera.y * camera.zoom);
+  ctx.scale(camera.zoom, camera.zoom);
+
+  // draw tiles
+  for (let y = 0; y < ROWS; y++) {
+    for (let x = 0; x < COLS; x++) {
+      const c = map[y][x];
+      const px = x * BASE_TILE;
+      const py = y * BASE_TILE;
+
+      // terrain base
+      if (c.type === 'ocean') {
+        ctx.fillStyle = `hsl(210, 55%, ${18 + c.elev*10}%)`;
+      } else if (c.type === 'mountain') {
+        ctx.fillStyle = '#4a5568';
+      } else if (c.type === 'forest') {
+        ctx.fillStyle = '#1b4332';
+      } else {
+        ctx.fillStyle = '#2d6a4f';
+      }
+      ctx.fillRect(px, py, BASE_TILE - 0.5, BASE_TILE - 0.5);
+
+      // ownership tint
+      if (c.owner > 0) {
+        ctx.fillStyle = NATION_COLORS[c.owner].fill + '99';
+        ctx.fillRect(px, py, BASE_TILE - 0.5, BASE_TILE - 0.5);
+
+        // subtle border
+        ctx.strokeStyle = NATION_COLORS[c.owner].glow + '66';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(px+0.5, py+0.5, BASE_TILE-1.5, BASE_TILE-1.5);
+      }
+
+      // building
+      if (c.building) {
+        const bx = px + 4, by = py + 4;
+        if (c.building === 'capital') {
+          ctx.fillStyle = '#ffeb3b';
+          ctx.beginPath();
+          ctx.arc(px + BASE_TILE/2, py + BASE_TILE/2, 5, 0, Math.PI*2);
+          ctx.fill();
+          // pulse
+          ctx.strokeStyle = `rgba(255,235,59,${0.4 + Math.sin(tick*0.15)*0.3})`;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(px + BASE_TILE/2, py + BASE_TILE/2, 8 + Math.sin(tick*0.15)*2, 0, Math.PI*2);
+          ctx.stroke();
+        } else if (c.building === 'farm') {
+          ctx.fillStyle = '#a5d6a7';
+          ctx.fillRect(bx, by, 9, 9);
+        } else if (c.building === 'mine') {
+          ctx.fillStyle = '#b0bec5';
+          ctx.fillRect(bx, by, 9, 9);
+        } else if (c.building === 'barracks') {
+          ctx.fillStyle = '#ef9a9a';
+          ctx.fillRect(bx, by, 9, 9);
+        } else if (c.building === 'city') {
+          ctx.fillStyle = '#90caf9';
+          ctx.fillRect(bx, by, 10, 10);
         }
       }
-    }
-  }
 
-  // occasional alliance offer to player or other AI
-  if (Math.random() < 0.08) {
-    const candidates = [1,2,3,4].filter(oid => oid !== id && !n.allies.includes(oid) && !n.atWar.includes(oid));
-    if (candidates.length) {
-      const target = candidates[Math.floor(Math.random() * candidates.length)];
-      // auto-accept between AIs sometimes, player has to click
-      if (target !== PLAYER_ID && Math.random() < 0.5) {
-        formAlliance(id, target);
+      // troops
+      if (c.troops > 0) {
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 10px Rajdhani';
+        ctx.fillText(c.troops, px + 2, py + 12);
       }
     }
   }
-}
 
-// ===================== DIPLOMACY =====================
-function formAlliance(a, b) {
-  if (nations[a].allies.includes(b)) return;
-  nations[a].allies.push(b);
-  nations[b].allies.push(a);
-  // remove war if any
-  nations[a].atWar = nations[a].atWar.filter(id => id !== b);
-  nations[b].atWar = nations[b].atWar.filter(id => id !== a);
-  log(`${nations[a].name} and ${nations[b].name} formed an alliance!`, "ally");
-  updateUI();
-}
-
-function breakAlliance(a, b) {
-  nations[a].allies = nations[a].allies.filter(id => id !== b);
-  nations[b].allies = nations[b].allies.filter(id => id !== a);
-  log(`${nations[a].name} broke alliance with ${nations[b].name}.`, "war");
-  updateUI();
-}
-
-function proposeAlliance(targetId) {
-  // for simplicity player proposal is instantly accepted by AI (you can make it random)
-  if (nations[PLAYER_ID].atWar.includes(targetId)) {
-    log("Cannot ally while at war.", "normal");
-    return;
+  // selection
+  if (selected) {
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2.5;
+    ctx.strokeRect(selected.x * BASE_TILE, selected.y * BASE_TILE, BASE_TILE, BASE_TILE);
   }
-  formAlliance(PLAYER_ID, targetId);
+  if (attackFrom) {
+    ctx.strokeStyle = '#ffeb3b';
+    ctx.lineWidth = 2.5;
+    ctx.strokeRect(attackFrom.x * BASE_TILE, attackFrom.y * BASE_TILE, BASE_TILE, BASE_TILE);
+  }
+
+  // marching armies
+  animTroops.forEach(a => {
+    a.progress += 0.04;
+    const ix = a.x + (a.tx - a.x) * a.progress;
+    const iy = a.y + (a.ty - a.y) * a.progress;
+    ctx.fillStyle = NATION_COLORS[a.owner].fill;
+    ctx.beginPath();
+    ctx.arc(ix * BASE_TILE + BASE_TILE/2, iy * BASE_TILE + BASE_TILE/2, 6, 0, Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 9px Rajdhani';
+    ctx.fillText(a.troops, ix * BASE_TILE + 4, iy * BASE_TILE + 7);
+
+    if (a.progress >= 1) {
+      resolveCombat(a.tx, a.ty, a.troops, a.owner, a.targetOwner);
+      a.dead = true;
+    }
+  });
+  animTroops = animTroops.filter(a => !a.dead);
+
+  // particles
+  particles.forEach(p => {
+    p.x += p.vx; p.y += p.vy;
+    p.life--;
+    ctx.globalAlpha = Math.max(0, p.life / 40);
+    ctx.fillStyle = p.color;
+    ctx.fillRect(p.x, p.y, 3, 3);
+  });
+  particles = particles.filter(p => p.life > 0);
+  ctx.globalAlpha = 1;
+
+  // floating texts (world space)
+  floatingTexts.forEach(f => {
+    f.y -= 0.6;
+    f.life--;
+    ctx.globalAlpha = Math.max(0, f.life / 60);
+    ctx.fillStyle = f.color;
+    ctx.font = 'bold 13px Orbitron';
+    ctx.fillText(f.text, f.x - 20, f.y);
+  });
+  floatingTexts = floatingTexts.filter(f => f.life > 0);
+  ctx.globalAlpha = 1;
+
+  ctx.restore();
+
+  // minimap
+  drawMinimap();
+
+  requestAnimationFrame(render);
 }
 
-// ===================== UI =====================
+function drawMinimap() {
+  mctx.fillStyle = '#02060e';
+  mctx.fillRect(0,0,160,100);
+  const sx = 160 / COLS, sy = 100 / ROWS;
+  for (let y=0;y<ROWS;y++) {
+    for (let x=0;x<COLS;x++) {
+      const c = map[y][x];
+      if (c.type === 'ocean') mctx.fillStyle = '#0a1628';
+      else if (c.owner) mctx.fillStyle = NATION_COLORS[c.owner].fill;
+      else mctx.fillStyle = '#1b4332';
+      mctx.fillRect(x*sx, y*sy, sx+0.5, sy+0.5);
+    }
+  }
+  // camera rect
+  mctx.strokeStyle = '#4fc3f7';
+  mctx.lineWidth = 1;
+  mctx.strokeRect(
+    (-camera.x / BASE_TILE) * sx,
+    (-camera.y / BASE_TILE) * sy,
+    (W / camera.zoom / BASE_TILE) * sx,
+    (H / camera.zoom / BASE_TILE) * sy
+  );
+}
+
+// -------- UI --------
 function updateUI() {
-  const p = nations[PLAYER_ID];
-  document.getElementById('money').textContent = Math.floor(p.money);
-  document.getElementById('troops').textContent = countTroops(PLAYER_ID);
-  document.getElementById('land').textContent = countLand(PLAYER_ID);
+  const p = nations[1];
+  const money = Math.floor(p.money);
+  const troops = countTroops(1);
+  const land = countLand(1);
+
+  document.getElementById('money').textContent = money;
+  document.getElementById('troops').textContent = troops;
+  document.getElementById('land').textContent = land;
+  document.getElementById('top-money').textContent = money;
+  document.getElementById('top-troops').textContent = troops;
+  document.getElementById('top-land').textContent = land;
+
+  // selected
+  const si = document.getElementById('sel-info');
+  if (!selected) si.textContent = 'Click any tile';
+  else {
+    const c = map[selected.y][selected.x];
+    const owner = c.owner === 0 ? 'Neutral / Wild' :
+                  c.owner === -1 ? 'Ocean' :
+                  nations[c.owner]?.name || 'Unknown';
+    si.innerHTML = `
+      <b>(${selected.x}, ${selected.y})</b><br>
+      Terrain: ${c.type}<br>
+      Owner: ${owner}<br>
+      Troops: ${c.troops}<br>
+      Structure: ${c.building || 'none'}
+    `;
+  }
 
   // nations list
-  let html = '';
-  for (let id of [1,2,3,4]) {
+  let nh = '';
+  for (let id=1; id<=5; id++) {
     const n = nations[id];
-    const land = countLand(id);
-    html += `<div class="nation-row">
-      <div class="color-box" style="background:${n.color}"></div>
-      <span>${n.name} (${land} tiles)</span>
+    nh += `<div class="nation-item">
+      <div class="swatch" style="background:${n.color.fill}"></div>
+      <span style="flex:1">${n.name}</span>
+      <span style="color:var(--muted)">${countLand(id)}</span>
     </div>`;
   }
-  document.getElementById('nations-list').innerHTML = html;
+  document.getElementById('nations').innerHTML = nh;
 
   // diplomacy
-  let dip = '';
-  for (let id of [2,3,4]) {
+  let dh = '';
+  for (let id=2; id<=5; id++) {
     const n = nations[id];
-    const isAlly = p.allies.includes(id);
-    const isWar = p.atWar.includes(id);
-    dip += `<div class="nation-row">
-      <div class="color-box" style="background:${n.color}"></div>
-      <span style="flex:1">${n.name}</span>`;
-    if (isAlly) {
-      dip += `<button class="btn-danger" style="padding:4px 8px;font-size:0.75rem" onclick="breakAlliance(1,${id})">Break</button>`;
-    } else if (isWar) {
-      dip += `<span style="color:#f66;font-size:0.75rem">At War</span>`;
+    const ally = p.allies.includes(id);
+    const war = p.atWar.includes(id);
+    dh += `<div class="nation-item">
+      <div class="swatch" style="background:${n.color.fill}"></div>
+      <span style="flex:1;font-size:0.85rem">${n.name.split(' ')[0]}</span>`;
+    if (ally) {
+      dh += `<button class="btn-red" style="width:auto;padding:4px 8px;font-size:0.75rem" onclick="breakAlly(${id})">Break</button>`;
+    } else if (war) {
+      dh += `<span style="color:#ef9a9a;font-size:0.75rem">WAR</span>`;
     } else {
-      dip += `<button class="btn-success" style="padding:4px 8px;font-size:0.75rem" onclick="proposeAlliance(${id})">Ally</button>`;
+      dh += `<button class="btn-green" style="width:auto;padding:4px 8px;font-size:0.75rem" onclick="makeAlly(${id})">Ally</button>`;
     }
-    dip += `</div>`;
+    dh += `</div>`;
   }
-  document.getElementById('diplomacy').innerHTML = dip;
-}
-
-function updateSelectedInfo() {
-  const el = document.getElementById('tile-details');
-  if (!selected) {
-    el.innerHTML = 'Click a tile';
-    return;
-  }
-  const c = map[selected.y][selected.x];
-  let ownerName = c.owner === -1 ? 'Water' :
-                  c.owner === 0 ? 'Neutral' :
-                  nations[c.owner]?.name || 'Unknown';
-  el.innerHTML = `
-    (${selected.x}, ${selected.y})<br>
-    Owner: <b>${ownerName}</b><br>
-    Troops: ${c.troops}<br>
-    Building: ${c.building || 'none'}
-  `;
+  document.getElementById('diplo').innerHTML = dh;
 }
 
 function countLand(id) {
-  let n = 0;
-  for (let y = 0; y < ROWS; y++)
-    for (let x = 0; x < COLS; x++)
-      if (map[y][x].owner === id) n++;
+  let n=0;
+  for(let y=0;y<ROWS;y++) for(let x=0;x<COLS;x++) if(map[y][x].owner===id) n++;
   return n;
 }
-
 function countTroops(id) {
-  let n = 0;
-  for (let y = 0; y < ROWS; y++)
-    for (let x = 0; x < COLS; x++)
-      if (map[y][x].owner === id) n += map[y][x].troops;
+  let n=0;
+  for(let y=0;y<ROWS;y++) for(let x=0;x<COLS;x++) if(map[y][x].owner===id) n+=map[y][x].troops;
   return n;
 }
 
-function log(msg, type = "normal") {
-  const div = document.getElementById('log');
-  const entry = document.createElement('div');
-  entry.className = 'log-entry' + (type === 'war' ? ' log-war' : type === 'ally' ? ' log-ally' : type === 'build' ? ' log-build' : '');
-  entry.textContent = `• ${msg}`;
-  div.prepend(entry);
-  if (div.children.length > 40) div.removeChild(div.lastChild);
+function makeAlly(id) {
+  if (nations[1].atWar.includes(id)) return log("End the war first.", "sys");
+  nations[1].allies.push(id);
+  nations[id].allies.push(1);
+  log(`Alliance formed with ${nations[id].name}!`, "ally");
+  updateUI();
+}
+function breakAlly(id) {
+  nations[1].allies = nations[1].allies.filter(i=>i!==id);
+  nations[id].allies = nations[id].allies.filter(i=>i!==1);
+  log(`Alliance with ${nations[id].name} broken.`, "war");
+  updateUI();
 }
 
-// start
-init();
+function log(msg, type='sys') {
+  const el = document.getElementById('log');
+  const d = document.createElement('div');
+  d.className = 'log-line log-' + type;
+  d.textContent = '• ' + msg;
+  el.prepend(d);
+  if (el.children.length > 35) el.lastChild.remove();
+}
+
+// -------- START --------
+generateWorld();
+initNations();
+// center camera on player
+camera.x = -10 * BASE_TILE;
+camera.y = -8 * BASE_TILE;
+camera.zoom = 1.1;
+
+updateUI();
+log("Welcome to Empire Forge. Expand your Azure Federation!", "sys");
+setInterval(gameTick, 1000);
+render();
 </script>
 </body>
 </html>
