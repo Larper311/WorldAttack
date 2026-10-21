@@ -3,45 +3,50 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>World at War 3 — Enhanced</title>
+<title>World at War 3 — Fully Enhanced</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#050d18;color:#e8f0f8;font:13px/1.45 "Segoe UI",system-ui,sans-serif;display:flex;height:100vh;overflow:hidden}
+body{background:#030a14;color:#e6f0fa;font:13px/1.45 "Segoe UI",system-ui,sans-serif;display:flex;height:100vh;overflow:hidden}
 #main{flex:1;display:flex;flex-direction:column;min-width:0}
-#hud{display:flex;gap:8px;align-items:center;padding:7px 12px;background:linear-gradient(180deg,#0c1e32,#0a1828);border-bottom:1px solid #1e3a5a;flex-wrap:wrap;box-shadow:0 2px 8px #0006}
+#hud{display:flex;gap:8px;align-items:center;padding:8px 14px;background:linear-gradient(180deg,#0b1c30,#081525);border-bottom:1px solid #1a3555;flex-wrap:wrap;box-shadow:0 3px 12px #0008}
 #hud b{color:#ffd54a}
-#hud .tag{background:#132a45;padding:2px 7px;border-radius:4px;font-size:12px}
-#wrap{flex:1;position:relative;min-height:0;background:#06121f}
+#hud .tag{background:#122a44;padding:3px 8px;border-radius:5px;font-size:12px;border:1px solid #1e3a5a}
+#wrap{flex:1;position:relative;min-height:0;background:#04101c}
 #cv{position:absolute;inset:0;width:100%;height:100%;cursor:grab;touch-action:none}
 #cv:active{cursor:grabbing}
-#tip{position:absolute;pointer-events:none;background:#000c;backdrop-filter:blur(6px);padding:6px 10px;border-radius:6px;display:none;font-size:12px;line-height:1.45;border:1px solid #2a4a6a;max-width:260px;z-index:5;box-shadow:0 4px 12px #0008}
-#zb{position:absolute;left:12px;bottom:12px;display:flex;flex-direction:column;gap:3px}
-button{background:#1a4a78;color:#fff;border:0;border-radius:5px;padding:5px 10px;cursor:pointer;font:inherit;transition:background .15s,transform .1s}
-button:hover{background:#2a6aa8}
+#tip{position:absolute;pointer-events:none;background:#000d;backdrop-filter:blur(8px);padding:8px 12px;border-radius:8px;display:none;font-size:12px;line-height:1.5;border:1px solid #2a4a6a;max-width:280px;z-index:5;box-shadow:0 6px 20px #000a}
+#zb{position:absolute;left:14px;bottom:14px;display:flex;flex-direction:column;gap:4px}
+button{background:linear-gradient(180deg,#1c4e82,#163d68);color:#fff;border:0;border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit;transition:all .15s;box-shadow:0 2px 6px #0005}
+button:hover{background:linear-gradient(180deg,#2a6aa8,#1e5088);transform:translateY(-1px)}
 button:active{transform:scale(.97)}
-button:disabled{opacity:.35;cursor:default}
-button.on{background:#c98a00;box-shadow:0 0 0 1px #ffc040}
-#log{height:78px;overflow:auto;background:#06121f;padding:4px 10px;font-size:11.5px;border-top:1px solid #1e3a5a;scrollbar-width:thin}
+button:disabled{opacity:.35;cursor:default;transform:none}
+button.on{background:linear-gradient(180deg,#d49a00,#b87a00);box-shadow:0 0 0 1px #ffc040,0 2px 8px #0006}
+#log{height:82px;overflow:auto;background:#04101c;padding:5px 12px;font-size:11.5px;border-top:1px solid #1a3555;scrollbar-width:thin}
 #log .w{color:#ff8a80}#log .g{color:#8fe9b0}#log .n{color:#ffcc66}#log .x{color:#9ab}
-#side{width:320px;background:linear-gradient(180deg,#0c1e32,#0a1626);border-left:1px solid #1e3a5a;padding:10px;overflow:auto;line-height:1.5;scrollbar-width:thin}
-#side h3{margin:0 0 6px;font-size:14px;color:#ffd54a}
-#side hr{border:0;border-top:1px solid #1e3a5a;margin:8px 0}
-.row{padding:6px 0;border-bottom:1px solid #16304b}
-.bar{height:5px;background:#1a3048;border-radius:3px;margin:3px 0;overflow:hidden}
+#side{width:340px;background:linear-gradient(180deg,#0b1c30,#081420);border-left:1px solid #1a3555;padding:12px;overflow:auto;line-height:1.5;scrollbar-width:thin}
+#side h3{margin:0 0 8px;font-size:14px;color:#ffd54a}
+#side hr{border:0;border-top:1px solid #1a3555;margin:10px 0}
+.row{padding:7px 0;border-bottom:1px solid #142838}
+.bar{height:6px;background:#1a3048;border-radius:3px;margin:4px 0;overflow:hidden}
 .bar i{display:block;height:100%;border-radius:3px;transition:width .3s}
-#md{position:fixed;inset:0;background:#000a;display:none;align-items:center;justify-content:center;z-index:20;backdrop-filter:blur(3px)}
-#mc{background:linear-gradient(160deg,#0e2740,#0a1c30);border:1px solid #3a6a9a;border-radius:14px;padding:24px 28px;max-width:460px;text-align:center;line-height:1.55;box-shadow:0 12px 40px #000a}
-#mc h2{margin:0 0 10px;font-size:20px}
-#mc button{font-size:14px;padding:8px 16px;margin:8px 4px 0}
-#toasts{position:fixed;top:58px;left:50%;transform:translateX(-50%);z-index:15;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none}
-.ts{background:#0d2740ee;border:1px solid #3a6a9a;padding:7px 16px;border-radius:8px;font-size:13px;box-shadow:0 4px 16px #0006;animation:toastIn .3s ease}
+#md{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;z-index:20;backdrop-filter:blur(4px)}
+#mc{background:linear-gradient(160deg,#0e2740,#0a1c30);border:1px solid #3a6a9a;border-radius:16px;padding:26px 30px;max-width:480px;text-align:center;line-height:1.55;box-shadow:0 16px 50px #000c}
+#mc h2{margin:0 0 12px;font-size:21px}
+#mc button{font-size:14px;padding:9px 18px;margin:8px 5px 0}
+#toasts{position:fixed;top:62px;left:50%;transform:translateX(-50%);z-index:15;display:flex;flex-direction:column;gap:7px;align-items:center;pointer-events:none}
+.ts{background:#0d2740ee;border:1px solid #3a6a9a;padding:8px 18px;border-radius:9px;font-size:13px;box-shadow:0 5px 18px #0007;animation:toastIn .3s ease}
 .ts.w{border-color:#e55}.ts.g{border-color:#5c8}
-@keyframes toastIn{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
-.lb-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #16304b;font-size:12px}
-.lb-rank{width:22px;color:#8ab;font-weight:600}
+@keyframes toastIn{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
+.lb-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #142838;font-size:12px}
+.lb-rank{width:24px;color:#8ab;font-weight:600}
 .lb-name{flex:1;font-weight:500}
 .lb-val{color:#ffd54a;font-variant-numeric:tabular-nums}
-@media(max-width:860px){body{flex-direction:column}#side{width:100%;height:38%;border-left:0;border-top:1px solid #1e3a5a}}
+#settings{position:absolute;right:14px;bottom:14px;z-index:6}
+#settingsBtn{background:linear-gradient(180deg,#2a3a55,#1e2c42);font-size:16px;padding:8px 12px}
+#setPanel{display:none;position:absolute;right:0;bottom:46px;background:#0c1e32ee;border:1px solid #2a4a6a;border-radius:10px;padding:12px 16px;min-width:220px;box-shadow:0 8px 24px #000a}
+#setPanel label{display:flex;align-items:center;gap:8px;margin:8px 0;cursor:pointer;font-size:13px}
+#setPanel input[type=checkbox]{width:16px;height:16px;accent-color:#3a8}
+@media(max-width:900px){body{flex-direction:column}#side{width:100%;height:36%;border-left:0;border-top:1px solid #1a3555}}
 </style>
 </head>
 <body>
@@ -55,6 +60,17 @@ button.on{background:#c98a00;box-shadow:0 0 0 1px #ffc040}
       <button onclick="zoomAt(cw/2,ch/2,1/1.4)" title="Zoom out">－</button>
       <button onclick="fit()" title="Fit world">⌂</button>
     </div>
+    <div id="settings">
+      <button id="settingsBtn" onclick="toggleSettings()" title="Settings">⚙️</button>
+      <div id="setPanel">
+        <label><input type="checkbox" id="setDip" checked onchange="settings.dipRequests=this.checked"> Diplomacy requests</label>
+        <label><input type="checkbox" id="setAnim" checked onchange="settings.animations=this.checked"> Extra animations</label>
+        <label><input type="checkbox" id="setPart" checked onchange="settings.particles=this.checked"> Particles & effects</label>
+        <label><input type="checkbox" id="setSea" checked onchange="settings.animatedSea=this.checked"> Animated oceans</label>
+        <hr style="margin:8px 0;border-color:#2a4a6a">
+        <small style="opacity:.7">Tip: disable diplomacy if spammy</small>
+      </div>
+    </div>
   </div>
   <div id="log"></div>
 </div>
@@ -64,40 +80,41 @@ button.on{background:#c98a00;box-shadow:0 0 0 1px #ffc040}
 
 <script>
 // ========== CONFIG & DATA ==========
-const W = 2400, H = 980, S = 6.8; // higher internal resolution for sharper zoom
+const W = 2400, H = 980, S = 6.8;
 const N = 65535;
 const pj = (a,b) => [(a+170)*S, (84-b)*S];
 const rnd = n => Math.random()*n|0;
 const $ = s => document.querySelector(s);
 
-// Improved land polygons (still stylized but tighter to real coastlines)
+const settings = {
+  dipRequests: true,
+  animations: true,
+  particles: true,
+  animatedSea: true
+};
+
+function toggleSettings(){
+  const p = $('#setPanel');
+  p.style.display = p.style.display === 'block' ? 'none' : 'block';
+}
+
+// Improved land polygons
 const LAND = [
-  // North America
   [-168,66,-163,69,-156,71.5,-141,69.5,-125,70,-110,68,-95,68,-90,64,-94,60,-92,57,-85,55,-82,52,-79,52,-79,56,-77,60,-78,62.5,-72,62,-70,59,-67,58.5,-64,60,-62,57,-58,54,-56,52,-60,50,-66,50,-64,48.5,-60,46,-66,45,-61,45.5,-66,43.5,-70,43,-70,41.7,-74,40.5,-76,37,-75.5,35,-78,34,-81,31.5,-80,27,-80.5,25.3,-82,26.5,-83,29.5,-85,29.7,-89,30,-90,29,-94,29.5,-97,27.5,-97.5,24,-97.8,22,-96,19,-94.5,18,-91,18.5,-90.5,21,-87,21.5,-87.5,18,-88.5,16,-84,15.8,-83,14.5,-83.5,11,-81.5,9,-79,9.3,-77.5,8.5,-78,7.5,-80,7.3,-82.5,8.2,-85.5,10,-87.5,13,-91,14,-94,16,-97,15.8,-101,17.5,-105.5,20,-105.5,22.5,-109,25,-110,23,-114,27.5,-117,32.5,-120.5,34.5,-122.5,37.5,-124,40.5,-124,46,-124.5,48.5,-123,49,-127,51,-130,54,-134,58,-138,59,-144,60,-150,59.5,-153,57.5,-158,56.5,-162,55,-158,58.5,-162,59.5,-165,61,-161,63.5,-166,64.5],
-  // South America
   [-77.3,8.6,-75,11,-72,12,-71,11,-68,10.5,-64,10.6,-61,10,-58,6.8,-54,5.8,-51.5,4.2,-50,1.5,-50,-0.5,-44,-2.5,-40,-3,-35,-5.2,-35,-8,-37.5,-12,-39,-17,-40.5,-20.5,-43,-23,-48,-25.5,-48.7,-28.5,-52,-32,-53.5,-34,-56,-34.8,-58,-34.3,-57.5,-37.5,-62,-39,-62.3,-41,-65,-41,-64.5,-43,-67.5,-46,-66,-48,-68.5,-50.5,-69,-52.5,-68.5,-54,-72,-53.5,-75,-50,-75.5,-46,-73.7,-43,-73.5,-37,-71.7,-33,-71.5,-28,-70.5,-23.5,-70.3,-18.3,-75,-15,-77,-12,-79.5,-7.5,-81,-5,-80,-2.5,-80.5,-1,-79,1.5,-78,3,-77.3,6],
-  // Eurasia + Africa
   [-9,37,-9.5,39,-9,43,-2,43.5,-1.5,46,-4.5,48.3,-1.5,48.7,1.5,50.2,4,51.5,5,53.3,8.5,54,8.3,57,10.5,57.7,10.5,56,9.5,54.8,12,54.2,14,54,19,54.5,21,57,24,57.3,24.3,59.4,28,59.5,30,60,23,60,21.5,61,21.5,63,25,65,21.5,65.5,17.5,62.5,17,60.5,19,59.7,16.5,57,14,55.5,12.8,56,11.5,58.5,8,58,5.5,59,5,62,8,63.5,12.5,66,15,68.5,19,70,25,71,31,70,33,69.3,41,67,40,65,44,66,44,68.5,54,68.5,60,69,68,69,70,73,75,72.5,80,73,87,75,100,77.5,105,77,113,74,125,73.5,130,71,140,72.5,150,71.5,160,69.5,170,70,180,69,180,65,178,64.5,172,62,164,60,163,58,156,51,155,57,160,61,150,59.5,143,59,137,54,141,53,140,48,135,43.5,131,42.5,129,40.5,127.5,39.5,129.5,36,126.5,34.5,126,37.5,125,39.5,121.5,39,122,40.7,118,39,119,37.3,122.5,37.3,120.5,36.2,119,34.5,121.5,31.5,122,30,120,26,116,22.8,110.5,21,108,21.5,106.5,18.5,109,14,109,11.5,105,8.7,104.5,10.5,100.5,13.4,99.5,9.5,101,6.5,103.5,4,104,1.4,101,2.8,98.5,8,98,12,97.5,16.5,94.5,16,94,19,92,21.5,90,22,87,21.5,86.5,20,83,17,80.3,15.5,80,10,77.5,8,76,10.5,73,17,72.8,21,70,20.8,68.5,23.5,66.5,25.3,61.5,25.2,57,25.7,56.5,27,54,26.7,51,28.5,48.5,30,48,29.3,50,26,51.5,24.5,54,24.2,56.3,26,56.5,24.5,59.8,22.5,57.5,19,55,17,52,16,48.5,14,45,12.8,43.3,12.7,42.8,15,41,19,39,21.5,37,25.5,35,28.5,34.3,28,32.6,30,32.5,31.2,34.5,31.5,35,33,36,35.5,36,36.8,33,36.2,30.5,36.5,28,36.8,27,38.5,26,40.7,23.5,40,24,38,23,36.5,21.5,37,21,38.5,19.5,41,19,42,13.5,45.5,12.3,45.3,14,42,16,41.5,18.5,40.2,16.5,38.5,15.7,38,16,40,14,40.8,12,42,10.5,43.5,8.8,44.4,7,43.6,4.5,43.4,3,42.5,0,40,-0.5,38.5,-2,36.8,-5,36,-6.5,36.9],
-  // Africa detail
   [-5.5,35.8,-2,35.2,3,36.8,10,37.2,11,35,10,33.5,15,32.3,19,30.5,20,32.3,23,32.7,29,31,32.5,31.2,32.5,29.9,33,28,34,27,35.5,24,37,21,38.5,18,40,15.5,43,12.5,43.5,11.5,51,11.8,51,10.5,48.5,5,46,2,41.5,-1.5,39.5,-4.5,39,-7,40.5,-10.5,40.5,-15,35,-19.5,35.5,-24,32.8,-26,32.5,-29,30,-31.5,27,-33.8,22,-34.2,19,-34.8,18.3,-32,16.5,-28.5,15,-26,14.5,-22,11.8,-17,13.5,-12,12.5,-6,9,-1,9.5,3.8,6,4.3,4,6.3,-1.5,5,-4.5,5.2,-7.8,4.4,-10.5,6.5,-13.2,8.5,-16.8,12.5,-17.5,14.7,-16.5,19,-17,21,-14.5,26,-12,28,-9.8,30,-9.5,32.5,-6.8,34],
-  // Greenland
   [-73,78,-60,82,-30,83.5,-20,81,-18,76,-22,70,-32,68,-40,65,-43,60,-48,61,-53,66,-55,70,-58,75],
-  // Iceland
   [-24,65.5,-22,64,-16,63.5,-13.5,65,-16,66.5,-22,66.5],
-  // British Isles
   [-5.5,50,1.5,51,1.7,52.8,-0.5,54.5,-2,56,-2,57.6,-3.5,58.6,-5.5,58.5,-6,56.5,-4.8,55,-3,54.5,-3.2,53.4,-4.5,53.3,-5,51.7],
   [-10,51.7,-6,52,-6,54.2,-8,55.2,-10,54],
-  // Japan
   [130,31.3,131,34,133,34,135,33.6,137,34.6,140,35,141,36,142,39.5,141.5,41,139.5,38,136,36.5,132,35.5],
   [140,42,141,45.4,145,43.3,143,42],
-  // Arctic Canada
   [-78,64,-68,63,-62,66,-70,70.5,-80,73.5,-89,71,-84,68],
   [-118,70,-105,69,-102,72,-112,73,-120,71.5],
   [-90,76,-75,78,-62,82,-80,83,-95,80],
-  // Cuba / Caribbean bits
   [-84.5,22,-81,23,-74.2,20.2,-77.5,19.9,-80,21.8],
   [-74.5,19.8,-69,19.8,-68.5,18.4,-74,18.2],
-  // SE Asia / Indonesia
   [95.3,5.5,98,4,104,-1,106,-3,105.8,-5.8,102,-4,97,1],
   [105.2,-6.8,114.5,-7.8,114,-8.7,106,-7.5],
   [109,1.5,111,2,115,5,117,7,119,5,117.5,1,116.5,-3.8,114,-4,110.5,-3,109,-1],
@@ -105,15 +122,11 @@ const LAND = [
   [131,-0.8,135,-3.2,138,-1.7,144,-3.7,147.5,-6,150.5,-10.5,146,-8.5,143,-9,141,-9.2,138,-8.2,137.5,-5,133,-4,132,-2.5],
   [120,18.5,122,18,122,14,124,13,121,13.5,120,15],
   [122,7,126,7.5,126,6,124,6.5],
-  // Australia
   [114,-22,114,-26,115,-34,118,-35,123.5,-34,129,-31.6,132,-32,135.5,-34.8,137.8,-33,138,-35.5,140,-38,144,-38.5,147,-38.3,150,-37.5,151.5,-33,153.5,-28.5,153,-25,150,-22.5,146,-19,145.5,-15,143.5,-14,142.5,-10.8,141.5,-13,141,-17,139,-17.5,136,-15,137,-12,135,-12,132,-11.3,130,-12.5,129.5,-15,126,-14,123,-17,122,-18,118,-20],
   [144.7,-40.8,148,-40.8,147,-43.5,145.5,-42.5],
-  // New Zealand
   [172.7,-34.5,175,-37,178,-37.7,176.5,-40.5,174.8,-41.4,175,-39.5,173.8,-39.3],
   [172.7,-40.6,174.2,-41.5,171.2,-44.2,170.7,-46,167,-46.2,166.5,-45.5,170.5,-43,172,-41],
-  // Madagascar
   [49.3,-12,50.5,-15.5,47.5,-25,44,-24.8,43.5,-21,44.5,-16.5,47,-14],
-  // Sri Lanka
   [80,9.5,82,7,81,6,79.8,7.5]
 ];
 
@@ -122,7 +135,6 @@ const SEA = [
   [47,45,53,46.5,53.5,42,54,40,53,37,50.5,37,49,38.5,49,41,47.5,43]
 ];
 
-// Expanded country list (more nations, better seeds)
 const CT = `Canada|3|-125,57;-112,56;-100,55;-88,50;-76,51;-66,50;-100,68;-85,66;-118,69;-70,64;-60,53.5
 USA|5|-120,43;-150,64;-118,36;-108,40;-97,40;-88,40;-98,32;-84,32;-76,41;-92,46;-110,45
 Mexico|3|-104,25;-98,20;-90,18;-111,29
@@ -258,19 +270,16 @@ Honduras|1|-86.5,14.5
 El Salvador|1|-89,13.7
 Nicaragua|1|-85,12.5
 Suriname|1|-56,4
-French Guiana|1|-53,4
-Bolivia|1|-65,-17
-Paraguay|1|-58,-23`.trim();
+French Guiana|1|-53,4`.trim();
 
 const NK = new Set(['USA','Russia','China','India','UK','France','Pakistan','North Korea']);
-const COST = {mine:140, fact:190, fort:110, silo:380};
-const ICON = {mine:'⛏', fact:'🏭', fort:'🧱', silo:'🚀'};
-const G = [4, 3, 2]; // AI action frequency by difficulty (higher = less frequent)
+const COST = {mine:140, fact:190, fort:110, silo:380, port:160, air:220};
+const ICON = {mine:'⛏', fact:'🏭', fort:'🧱', silo:'🚀', port:'⚓', air:'✈️'};
+const G = [4, 3, 2];
 
-// Rivalries (AI more likely to war these pairs)
 const RIVALS = {
   'USA':['Russia','China','Iran','North Korea'],
-  'Russia':['USA','Ukraine','NATO','Poland','Japan'],
+  'Russia':['USA','Ukraine','Poland','Japan'],
   'China':['USA','India','Japan','Taiwan','Vietnam'],
   'India':['Pakistan','China'],
   'Pakistan':['India'],
@@ -278,13 +287,12 @@ const RIVALS = {
   'France':['Russia'],
   'Germany':['Russia'],
   'Japan':['China','Russia','North Korea'],
-  'North Korea':['USA','South Korea','Japan'],
-  'Iran':['USA','Saudi Arabia','Israel'],
+  'North Korea':['USA','Japan'],
+  'Iran':['USA','Saudi Arabia'],
   'Saudi Arabia':['Iran','Yemen'],
   'Turkey':['Greece','Russia'],
   'Ukraine':['Russia'],
   'Poland':['Russia'],
-  'Israel':['Iran','Levant'],
   'Egypt':['Ethiopia'],
   'Ethiopia':['Egypt','Somalia'],
   'Brazil':['Argentina'],
@@ -294,7 +302,8 @@ const RIVALS = {
 // ========== STATE ==========
 let diff = 1, P = null, sel = -1, hov = -1, day = 0, gt = 0, speed = 0, over = 0, tab = 0, frac = 0.7, insp = 0;
 let fx = [], M = [], dirty = 1, flash = 0, modal = 0, mq = [], mb = [];
-let particles = [];
+let particles = [], planes = [], ships = [];
+let seaOffset = 0;
 
 // ========== HELPERS ==========
 const hsl = (h,s,l) => {
@@ -334,14 +343,15 @@ CT.split('\n').forEach((l,i) => {
   const h = (i * 137.508) % 360 | 0;
   const c = {
     id:i, name:n, pw, h,
-    s: 40 + (i%4)*8, l: 34 + (i%5)*3,
-    money: 350 + pw*180, mis: pw>=4 ? 2 : 0,
+    s: 45 + (i%4)*7, l: 38 + (i%5)*3,
+    money: 380 + pw*190, mis: pw>=4 ? 2 : 0,
     nuk: NK.has(n) ? (pw>=5 ? 3 : 1) : 0,
     al: new Set(), war: new Set(), rel: [],
-    ag: 0.25 + Math.random()*0.65, pc: -99, dn: {},
-    alive:1, inf:0, tt:0, lastAllyOffer: -99, lastPeaceOffer: -99
+    ag: 0.22 + Math.random()*0.7, pc: -99, dn: {},
+    alive:1, inf:0, tt:0, lastAllyOffer: -99, lastPeaceOffer: -99,
+    planes: 0, ships: 0
   };
-  c.col = `hsl(${h},${c.s}%,${c.l+14}%)`;
+  c.col = `hsl(${h},${c.s}%,${c.l+12}%)`;
   s.split(';').forEach(t => {
     const [a,b] = t.split(',').map(Number);
     const [x,y] = pj(a,b);
@@ -377,8 +387,18 @@ for(let y=0; y<H; y++){
   Rg.forEach((r,i) => {
     r.i = i; r.cx /= r.n; r.cy /= r.n;
     r.inv = []; r.rad = 0; r.un = 0;
-    r.b = {mine:0, fact:0, fort:0, silo:0};
+    r.b = {mine:0, fact:0, fort:0, silo:0, port:0, air:0};
     r.nb = []; r.troops = 0;
+    // precompute detail points for trees/buildings
+    r.details = [];
+    const dens = Math.min(12, Math.max(2, r.n / 800 | 0));
+    for(let d=0; d<dens; d++){
+      r.details.push({
+        x: r.cx + (Math.random()-0.5)*Math.sqrt(r.n)*1.8,
+        y: r.cy + (Math.random()-0.5)*Math.sqrt(r.n)*1.8,
+        t: Math.random() < 0.55 ? 'tree' : (Math.random()<0.5?'house':'rock')
+      });
+    }
   });
 }
 
@@ -406,13 +426,14 @@ Rg.forEach((r,i) => {
   nl++;
 });
 
+// IMPROVED SEA CONNECTIONS — denser and longer range for proper naval travel
 const sea = Rg.map(() => new Set());
 Rg.forEach(a => {
   Rg.filter(b => lm[b.i] !== lm[a.i])
     .map(b => [b.i, Math.hypot(a.cx-b.cx, a.cy-b.cy)])
-    .filter(z => z[1] < 55)
+    .filter(z => z[1] < 95)  // increased from 55
     .sort((p,q) => p[1]-q[1])
-    .slice(0,2)
+    .slice(0, 5)             // more connections
     .forEach(z => { sea[a.i].add(z[0]); sea[z[0]].add(a.i); });
 });
 
@@ -426,10 +447,12 @@ C.forEach(c => {
   if(!rs.length){ c.alive = 0; return; }
   c.cap = rs[0].i;
   const cr = rs[0];
-  cr.troops += 14;
+  cr.troops += 16;
   cr.b.mine = 1; cr.b.fact = 1;
   if(c.pw >= 3 || c.nuk) cr.b.silo = 1;
   if(c.pw >= 3) cr.b.fort = 1;
+  if(c.pw >= 2) cr.b.port = 1;
+  if(c.pw >= 4) cr.b.air = 1;
 
   if(rs.length < 2){ rs[0].nm = c.name; return; }
   let mx_ = 0, my = 0;
@@ -449,7 +472,7 @@ C.forEach(c => {
 });
 
 Rg.forEach(r => {
-  r.troops += 6 + C[r.c].pw * 3.5 + Math.random() * 5;
+  r.troops += 7 + C[r.c].pw * 3.8 + Math.random() * 6;
 });
 
 const AC = C.map(() => new Set());
@@ -463,12 +486,12 @@ C.forEach(a => C.forEach(b => {
 
 const WIN = Math.ceil(Rg.length * 0.55);
 const own = o => Rg.filter(r => r.o === o);
-const str = o => own(o).reduce((s,r) => s + r.troops + 8, 0) + C[o].mis * 12 + C[o].nuk * 90;
-const inc = r => r.rad > 0 || r.un > 0 ? 0 : 2.2 + r.n/650 + r.b.mine * 11;
+const str = o => own(o).reduce((s,r) => s + r.troops + 8, 0) + C[o].mis * 12 + C[o].nuk * 90 + C[o].planes * 8;
+const inc = r => r.rad > 0 || r.un > 0 ? 0 : 2.3 + r.n/620 + r.b.mine * 12 + (r.b.port ? 4 : 0);
 const incT = o => Math.round(own(o).reduce((s,r) => s + inc(r), 0));
-const cost = (k,r) => Math.round(COST[k] * (1 + 0.35 * r.b[k]));
-const tcap = r => 55 + r.n / 22;
-const defm = r => 1.25 + 0.38 * r.b.fort + (r.i === C[r.o].cap ? 0.28 : 0);
+const cost = (k,r) => Math.round(COST[k] * (1 + 0.32 * r.b[k]));
+const tcap = r => 58 + r.n / 20;
+const defm = r => 1.28 + 0.4 * r.b.fort + (r.i === C[r.o].cap ? 0.3 : 0);
 
 // ========== LOGGING & MODALS ==========
 function log(m, c='', big){
@@ -476,13 +499,13 @@ function log(m, c='', big){
   d.textContent = `[Day ${day}] ${m}`;
   d.className = c;
   $('#log').prepend(d);
-  while($('#log').children.length > 55) $('#log').lastChild.remove();
+  while($('#log').children.length > 60) $('#log').lastChild.remove();
   if(big){
     const t = document.createElement('div');
     t.className = 'ts ' + c;
     t.textContent = m;
     $('#toasts').append(t);
-    setTimeout(() => t.remove(), 3800);
+    setTimeout(() => t.remove(), 4000);
   }
 }
 
@@ -511,10 +534,10 @@ function allyCheck(f,t){
   if(T.al.size >= 3) return [0,'already has enough alliances'];
   const r = T.rel[f];
   if(r < 38) return [0, `does not trust you enough yet (trust ${r|0}/38)`];
-  let p = 0.12 + (r-38)/110;
-  for(const w of T.war) if(F.war.has(w)) p += 0.22;
-  p -= F.inf * 0.14;
-  return [Math.max(0.04, Math.min(0.72, p)), ''];
+  let p = 0.11 + (r-38)/115;
+  for(const w of T.war) if(F.war.has(w)) p += 0.2;
+  p -= F.inf * 0.13;
+  return [Math.max(0.03, Math.min(0.7, p)), ''];
 }
 
 function peace(a,b){
@@ -527,22 +550,21 @@ function warOn(a,b){
   if(A.war.has(b)) return;
   if(A.al.has(b)){
     unally(a,b); A.inf++;
-    C.forEach(c => c.rel[a] -= 18);
+    C.forEach(c => c.rel[a] -= 20);
     log(`💔 ${A.name} betrayed ${B.name}!`, 'w', 1);
   }
   A.war.add(b); B.war.add(a);
-  B.rel[a] = Math.min(B.rel[a], -65);
+  B.rel[a] = Math.min(B.rel[a], -70);
   log(`⚔ ${A.name} declared war on ${B.name}`, 'w', a===P||b===P);
-  // Allies join more reliably
   for(const x of [...B.al]){
-    if(x!==a && C[x].alive && Math.random() < 0.85){
-      C[x].rel[a] -= 28;
+    if(x!==a && C[x].alive && Math.random() < 0.82){
+      C[x].rel[a] -= 30;
       log(`🛡 ${C[x].name} defends ${B.name}`, 'n', x===P);
       warOn(x,a);
     }
   }
   for(const x of [...A.al]){
-    if(x!==b && C[x].alive && !B.al.has(x) && Math.random() < 0.55){
+    if(x!==b && C[x].alive && !B.al.has(x) && Math.random() < 0.5){
       log(`🤝 ${C[x].name} joins ${A.name}`, 'n', x===P);
       warOn(x,b);
     }
@@ -550,11 +572,11 @@ function warOn(a,b){
 }
 
 // ========== MILITARY ==========
-function send(fi,ti,fr){
+function send(fi,ti,fr, isNaval=false, isAir=false){
   const f=Rg[fi], t=Rg[ti], o=f.o;
   if(f.troops < 2) return 'Not enough troops there';
   const l = f.nb.find(z => z[0]===ti);
-  if(!l) return 'Not adjacent';
+  if(!l && !isAir) return 'Not adjacent (or use airlift)';
   const n = Math.floor(f.troops * fr);
   if(n < 1) return '';
   const to = t.o;
@@ -564,9 +586,15 @@ function send(fi,ti,fr){
   }
   f.troops -= n;
   const dist = Math.hypot(f.cx-t.cx, f.cy-t.cy);
+  let mult = 1;
+  if(isAir) mult = 0.55;          // planes are faster
+  else if(l && l[1]) mult = 1.55; // naval slower
+  else if(isNaval) mult = 1.4;
+
   M.push({
-    f:fi, t:ti, o, n: l[1] ? n*0.82 : n,
-    st:gt, arr: gt + Math.max(0.9, dist/85) * (l[1]?1.7:1)
+    f:fi, t:ti, o, n: (l && l[1]) || isNaval ? n*0.85 : n,
+    st:gt, arr: gt + Math.max(0.7, dist/90) * mult,
+    type: isAir ? 'plane' : ((l && l[1]) || isNaval ? 'ship' : 'land')
   });
   return '';
 }
@@ -581,26 +609,33 @@ function arrive(m){
   }
   const v = t.inv.find(z => z.o===o);
   v ? v.n += m.n : t.inv.push({o, n:m.n});
+  // spawn battle particles
+  if(settings.particles){
+    for(let i=0;i<8;i++) particles.push({
+      x:t.cx+(Math.random()-0.5)*20, y:t.cy+(Math.random()-0.5)*20,
+      vx:(Math.random()-0.5)*30, vy:(Math.random()-0.5)*30,
+      life:0.5+Math.random()*0.6, col:'#ff6644', size:2+Math.random()*3
+    });
+  }
 }
 
 function battle(r){
   let A = r.inv.reduce((s,v) => s+v.n, 0);
   if(A < 0.5){ r.inv=[]; return; }
-  const x = () => 0.88 + Math.random()*0.24;
+  const x = () => 0.86 + Math.random()*0.28;
   const D = r.troops;
   const dm = defm(r);
-  // Improved attrition: more decisive, but still both sides hurt
-  const dD = Math.min(D, A * 0.13 * x());
-  const dA = D * dm * 0.11 * x();
+  const dD = Math.min(D, A * 0.14 * x());
+  const dA = D * dm * 0.12 * x();
   r.troops = D - dD;
   const k = Math.max(0, 1 - dA/A);
   r.inv.forEach(v => v.n *= k);
-  r.inv = r.inv.filter(v => v.n >= 0.4);
+  r.inv = r.inv.filter(v => v.n >= 0.35);
   A = r.inv.reduce((s,v) => s+v.n, 0);
-  if(r.troops < 0.7 && A > 0.6){
+  if(r.troops < 0.6 && A > 0.5){
     const winner = r.inv.reduce((a,b) => b.n > a.n ? b : a).o;
     capture(r, winner, A);
-  } else if(A < 0.5){
+  } else if(A < 0.4){
     r.inv = [];
     log(`🛡 ${C[r.o].name} repelled the attack on ${r.nm}`, 'n', r.o===P);
   }
@@ -608,21 +643,22 @@ function battle(r){
 
 function capture(r, o, n){
   const old = r.o, O=C[old], Nw=C[o];
-  r.o = o; r.troops = Math.max(1.5, n); r.inv=[]; r.b.fort=0; r.un=5;
+  r.o = o; r.troops = Math.max(1.8, n); r.inv=[]; r.b.fort=0; r.un=5;
   dirty=1;
-  const loot = Math.floor(O.money * 0.04);
+  const loot = Math.floor(O.money * 0.045);
   O.money -= loot; Nw.money += loot;
   log(`🚩 ${Nw.name} captured ${r.nm} from ${O.name}`, 'w', old===P||o===P);
-  // particles for capture
-  for(let i=0;i<12;i++) particles.push({
-    x:r.cx, y:r.cy, vx:(Math.random()-0.5)*40, vy:(Math.random()-0.5)*40,
-    life:0.8+Math.random()*0.6, col:Nw.col, size:3+Math.random()*4
-  });
+  if(settings.particles){
+    for(let i=0;i<16;i++) particles.push({
+      x:r.cx, y:r.cy, vx:(Math.random()-0.5)*50, vy:(Math.random()-0.5)*50,
+      life:0.9+Math.random()*0.7, col:Nw.col, size:3+Math.random()*5
+    });
+  }
   if(r.i === O.cap){
     log(`💥 ${O.name}'s capital has fallen!`, 'w', 1);
-    own(old).forEach(z => z.troops *= 0.78);
-    O.money *= 0.45; O.nuk = 0; O.mis >>= 1;
-    Nw.money += O.money * 0.25;
+    own(old).forEach(z => z.troops *= 0.76);
+    O.money *= 0.42; O.nuk = 0; O.mis >>= 1;
+    Nw.money += O.money * 0.28;
   }
   if(!own(old).length){
     O.alive=0;
@@ -647,7 +683,7 @@ function launch(a, ti, nuke){
   nuke ? A.nuk-- : A.mis--;
   fx.push({
     k: nuke?'n':'m', x1:s.cx, y1:s.cy, x2:t.cx, y2:t.cy,
-    t:0, d: nuke?2.6:1.6,
+    t:0, d: nuke?2.9:1.8,
     cb: () => impact(a,ti,nuke)
   });
   return '';
@@ -655,80 +691,109 @@ function launch(a, ti, nuke){
 
 function impact(a, ti, nuke){
   const t=Rg[ti], A=C[a];
-  fx.push({k:'b', x1:t.cx, y1:t.cy, t:0, d:nuke?2.2:1.0, R:nuke?70:24});
-  // explosion particles
-  for(let i=0;i<(nuke?28:12);i++){
-    particles.push({
-      x:t.cx, y:t.cy,
-      vx:(Math.random()-0.5)*(nuke?90:40),
-      vy:(Math.random()-0.5)*(nuke?90:40),
-      life:0.6+Math.random()*1.1,
-      col: nuke ? `hsl(${20+Math.random()*30},90%,60%)` : '#ffaa40',
-      size: 2+Math.random()*(nuke?7:4)
-    });
+  fx.push({k:'b', x1:t.cx, y1:t.cy, t:0, d:nuke?2.5:1.15, R:nuke?85:28});
+  if(settings.particles){
+    for(let i=0;i<(nuke?36:16);i++){
+      particles.push({
+        x:t.cx, y:t.cy,
+        vx:(Math.random()-0.5)*(nuke?110:50),
+        vy:(Math.random()-0.5)*(nuke?110:50),
+        life:0.7+Math.random()*1.3,
+        col: nuke ? `hsl(${15+Math.random()*40},95%,55%)` : '#ffaa30',
+        size: 2+Math.random()*(nuke?9:5)
+      });
+    }
   }
   if(nuke){
-    t.troops *= 0.22;
+    t.troops *= 0.18;
     for(const k in t.b) t.b[k] >>= 1;
-    t.rad = 35;
-    t.nb.forEach(([j]) => { if(Rg[j].o === t.o) Rg[j].troops *= 0.72; });
-    A.inf += 2.5;
-    flash = 1.1;
-    C.forEach(c => c.rel[a] -= c.al.has(a) ? 12 : 40);
+    t.rad = 40;
+    t.nb.forEach(([j]) => { if(Rg[j].o === t.o) Rg[j].troops *= 0.68; });
+    A.inf += 2.8;
+    flash = 1.25;
+    C.forEach(c => c.rel[a] -= c.al.has(a) ? 14 : 45);
     log(`☢ ${A.name} NUKED ${t.nm}! The world is horrified.`, 'w', 1);
   } else {
-    t.troops *= 0.78;
+    t.troops *= 0.74;
     const ks = Object.keys(t.b).filter(k => t.b[k]>0);
-    if(ks.length && Math.random() < 0.55) t.b[ks[rnd(ks.length)]]--;
+    if(ks.length && Math.random() < 0.6) t.b[ks[rnd(ks.length)]]--;
     log(`🚀 ${A.name}'s missile hit ${t.nm}`, 'n', t.o===P);
   }
   dirty=1;
 }
 
-// ========== AI (smarter, less spam) ==========
+// Airlift / planes
+function airlift(fi, ti, fr){
+  const f = Rg[fi], A = C[f.o];
+  if(A.planes < 1 && !own(f.o).some(r => r.b.air > 0)) return 'Need airbase or planes';
+  if(f.troops < 3) return 'Not enough troops';
+  const n = Math.floor(f.troops * fr);
+  if(n < 1) return '';
+  f.troops -= n;
+  if(A.planes > 0) A.planes--;
+  M.push({
+    f:fi, t:ti, o:f.o, n: n*0.9,
+    st:gt, arr: gt + Math.max(0.6, Math.hypot(f.cx-Rg[ti].cx, f.cy-Rg[ti].cy)/140),
+    type: 'plane'
+  });
+  return '';
+}
+
+// ========== AI (smarter) ==========
 function ai(o){
   const A = C[o], rs = own(o);
   if(!rs.length) return;
 
-  // Build / recruit
-  if(A.money > 180){
+  // Build / recruit smarter
+  if(A.money > 200){
+    // prioritize front-line forts and income
+    const fronts = rs.filter(r => r.nb.some(z => A.war.has(Rg[z[0]].o)));
+    const targets = fronts.length ? fronts : rs;
     for(let i=0; i<2; i++){
-      const r = rs[rnd(rs.length)];
+      const r = targets[rnd(targets.length)];
       const w = Math.random();
-      const k = w<0.38?'mine' : w<0.58?'fact' : w<0.82?'fort' : (A.pw>=3?'silo':'mine');
+      let k;
+      if(fronts.includes(r) && r.b.fort < 2 && w < 0.45) k = 'fort';
+      else if(w < 0.35) k = 'mine';
+      else if(w < 0.55) k = 'fact';
+      else if(w < 0.72 && A.pw >= 2) k = 'port';
+      else if(w < 0.85 && A.pw >= 3) k = 'air';
+      else k = A.pw >= 3 ? 'silo' : 'mine';
       if(r.b[k] < 3 && A.money > cost(k,r)){
         A.money -= cost(k,r); r.b[k]++;
-      } else if(A.money > 280 && Math.random() < 0.35){
-        A.money -= 48; r.troops += 11;
+      } else if(A.money > 300 && Math.random() < 0.4){
+        A.money -= 52; r.troops += 13;
       }
     }
   }
-  if(NK.has(A.name) && A.money > 1900 && Math.random() < 0.04){
-    A.money -= 1700; A.nuk++;
+  if(NK.has(A.name) && A.money > 2000 && Math.random() < 0.035){
+    A.money -= 1750; A.nuk++;
   }
-  if(A.pw >= 2 && A.money > 850 && Math.random() < 0.07){
-    A.money -= 240; A.mis++;
+  if(A.pw >= 2 && A.money > 900 && Math.random() < 0.06){
+    A.money -= 250; A.mis++;
+  }
+  if(A.pw >= 3 && A.money > 600 && Math.random() < 0.05){
+    A.money -= 180; A.planes = (A.planes||0) + 1;
   }
 
-  // Border relations drift
+  // Relations drift
   const nb = [...new Set(rs.flatMap(r => r.nb.map(z => Rg[z[0]].o)))].filter(x => x!==o && C[x].alive);
-  if(nb.length && day % 7 === o % 7){
+  if(nb.length && day % 8 === o % 8){
     const x = nb[rnd(nb.length)];
-    A.rel[x] += Math.random()*6 - 3.5;
+    A.rel[x] += Math.random()*5 - 3;
   }
 
-  // Independent war declarations (much more active)
-  if(A.war.size < 2 && day > 18 && Math.random() < 0.006 + 0.014*A.ag){
+  // Independent wars — more thoughtful
+  if(A.war.size < 2 && day > 20 && Math.random() < 0.005 + 0.012*A.ag){
     const rivals = (RIVALS[A.name] || []).map(n => C.find(c => c.name===n)).filter(c => c && c.alive && !A.al.has(c.id) && !A.war.has(c.id));
-    let targets = nb.filter(x => !A.al.has(x) && A.rel[x] < 20 &&
-      str(o) + [...A.al].reduce((s,z)=>s+str(z),0) > 1.25 * (str(x) + [...C[x].al].reduce((s,z)=>s+str(z),0)));
-    if(rivals.length && Math.random() < 0.55) targets = rivals.map(c => c.id).filter(id => targets.includes(id) || Math.random()<0.4);
+    let targets = nb.filter(x => !A.al.has(x) && A.rel[x] < 18 &&
+      str(o) + [...A.al].reduce((s,z)=>s+str(z),0) > 1.3 * (str(x) + [...C[x].al].reduce((s,z)=>s+str(z),0)));
+    if(rivals.length && Math.random() < 0.5) targets = rivals.map(c => c.id).filter(id => targets.includes(id) || Math.random()<0.35);
     if(targets.length) warOn(o, targets[rnd(targets.length)]);
   }
 
   // War management
   if(A.war.size){
-    // Reinforce front
     const dist = new Map(), q = [];
     rs.forEach(r => {
       if(r.nb.some(z => A.war.has(Rg[z[0]].o))){ dist.set(r.i,0); q.push(r); }
@@ -743,64 +808,75 @@ function ai(o){
     let n=0;
     for(const r of rs){
       const d = dist.get(r.i);
-      if(d>0 && r.troops>13 && n<7){
+      if(d>0 && r.troops>14 && n<8){
         const b = r.nb.map(z=>Rg[z[0]]).find(x => x.o===o && dist.get(x.i)<d);
-        if(b){ send(r.i, b.i, 0.55); n++; }
+        if(b){ send(r.i, b.i, 0.5); n++; }
       }
     }
-    // Attack
     let at=0;
     for(const f of rs){
-      if(f.troops < 15 || at >= 3) continue;
-      let bt=null, br=1.28;
+      if(f.troops < 16 || at >= 3) continue;
+      let bt=null, br=1.3;
       for(const [j] of f.nb){
         const t = Rg[j];
         if(!A.war.has(t.o)) continue;
-        const ra = (f.troops * 0.68) / (t.troops * defm(t) + 3);
+        const ra = (f.troops * 0.7) / (t.troops * defm(t) + 4);
         if(ra > br){ br=ra; bt=t; }
       }
-      if(bt){ send(f.i, bt.i, 0.72); at++; }
+      if(bt){ send(f.i, bt.i, 0.7); at++; }
+    }
+    // Use air if available
+    if(A.planes > 0 && Math.random() < 0.12){
+      const en = [...A.war].filter(x => C[x].alive);
+      if(en.length){
+        const er = own(en[rnd(en.length)]);
+        if(er.length){
+          const tgt = er.sort((x,y)=>y.troops-x.troops)[0];
+          const src = rs.filter(r => r.troops > 20).sort((a,b)=>b.troops-a.troops)[0];
+          if(src) airlift(src.i, tgt.i, 0.4);
+        }
+      }
     }
     // Missiles / nukes
     const en = [...A.war].filter(x => C[x].alive);
     if(en.length){
       const er = own(en[rnd(en.length)]);
-      if(A.mis > 0 && Math.random() < 0.09 && er.length){
+      if(A.mis > 0 && Math.random() < 0.08 && er.length){
         launch(o, er.sort((x,y)=>y.troops-x.troops)[0].i, 0);
       }
-      if(A.nuk > 0 && A.ag > 0.75 && Math.random() < 0.018 && er.length){
+      if(A.nuk > 0 && A.ag > 0.72 && Math.random() < 0.015 && er.length){
         launch(o, er[rnd(er.length)].i, 1);
       }
-      // Peace offers — much rarer and smarter
+      // Peace — rarer
       for(const e of en){
-        if(day - A.lastPeaceOffer < 25) continue;
+        if(day - A.lastPeaceOffer < 28) continue;
         const myStr = str(o), theirStr = str(e);
-        const wantPeace = (myStr < theirStr * 0.55 && Math.random() < 0.04) ||
-                          (Math.random() < 0.005) ||
-                          (A.war.size > 1 && Math.random() < 0.03);
+        const wantPeace = (myStr < theirStr * 0.5 && Math.random() < 0.035) ||
+                          (Math.random() < 0.004) ||
+                          (A.war.size > 1 && Math.random() < 0.025);
         if(wantPeace){
           A.lastPeaceOffer = day;
-          if(e === P){
+          if(e === P && settings.dipRequests){
             ask('🕊 Ceasefire offer', `<b>${A.name}</b> asks for a ceasefire.`, [
               {l:'Accept', fn:()=>peace(o,P)}, {l:'Refuse'}
             ]);
-          } else if(Math.random() < 0.45) peace(o,e);
+          } else if(Math.random() < 0.4) peace(o,e);
         }
       }
     }
   }
 
-  // Alliance offers — heavily reduced spam
-  if(Math.random() < 0.007 && day - A.lastAllyOffer > 22 && P!==null && C[P].alive &&
-     !A.war.has(P) && !A.al.has(P) && A.rel[P] >= 48 && A.al.size < 3 && C[P].al.size < 3){
+  // Alliance offers — heavily gated by setting
+  if(settings.dipRequests && Math.random() < 0.005 && day - A.lastAllyOffer > 28 && P!==null && C[P].alive &&
+     !A.war.has(P) && !A.al.has(P) && A.rel[P] >= 50 && A.al.size < 3 && C[P].al.size < 3){
     A.lastAllyOffer = day;
     ask('🤝 Alliance offer', `<b>${A.name}</b> proposes a military alliance.`, [
       {l:'Accept', fn:()=>{ ally(o,P); log(`🤝 You allied with ${A.name}`,'g',1); }},
       {l:'Decline'}
     ]);
-  } else if(Math.random() < 0.005 && A.al.size < 3){
+  } else if(Math.random() < 0.004 && A.al.size < 3){
     const t = C.find(c => c.alive && c.id!==o && c.id!==P && !A.al.has(c.id) && !A.war.has(c.id) &&
-      c.al.size < 3 && A.rel[c.id] > 45 && c.rel[o] > 45);
+      c.al.size < 3 && A.rel[c.id] > 48 && c.rel[o] > 48);
     if(t){ ally(o,t.id); log(`🤝 ${A.name} & ${t.name} formed an alliance`,'g'); }
   }
 }
@@ -809,16 +885,16 @@ function daily(){
   day++;
   Rg.forEach(r => {
     const A = C[r.o];
-    if(r.rad > 0){ r.rad--; r.troops *= 0.985; return; }
+    if(r.rad > 0){ r.rad--; r.troops *= 0.982; return; }
     if(r.un > 0) r.un--;
     else {
       A.money += inc(r);
-      if(r.troops < tcap(r)) r.troops += 0.12 + r.b.fact * 1.25 + (r.i===A.cap ? 0.55 : 0);
+      if(r.troops < tcap(r)) r.troops += 0.13 + r.b.fact * 1.3 + (r.i===A.cap ? 0.6 : 0) + (r.b.air ? 0.2 : 0);
     }
-    if(r.o !== r.c && C[r.c].alive && r.troops < 5.5 && !r.inv.length && Math.random() < 0.007){
+    if(r.o !== r.c && C[r.c].alive && r.troops < 5 && !r.inv.length && Math.random() < 0.006){
       log(`✊ ${r.nm} rose up and returned to ${C[r.c].name}!`, 'n', 1);
       const old = C[r.o];
-      r.o = r.c; r.troops = 8; dirty=1;
+      r.o = r.c; r.troops = 9; dirty=1;
       if(!own(old.id).length) old.alive=0;
     }
   });
@@ -826,11 +902,11 @@ function daily(){
   C.forEach(c => {
     if(!c.alive) return;
     if(c.id !== P && day % G[diff] === c.id % G[diff]) ai(c.id);
-    for(const w of c.war) c.rel[w] = Math.max(-100, c.rel[w]-0.9);
-    for(const a of c.al) c.rel[a] = Math.min(100, c.rel[a]+0.12);
-    for(const x of c.war) for(const w of C[x].war) if(w!==c.id && !c.war.has(w)) c.rel[w] = Math.min(100, c.rel[w]+0.25);
+    for(const w of c.war) c.rel[w] = Math.max(-100, c.rel[w]-0.95);
+    for(const a of c.al) c.rel[a] = Math.min(100, c.rel[a]+0.13);
+    for(const x of c.war) for(const w of C[x].war) if(w!==c.id && !c.war.has(w)) c.rel[w] = Math.min(100, c.rel[w]+0.28);
     if(c.id === P) C.forEach(x => {
-      if(x.alive && x.id!==P && !c.war.has(x.id)) x.rel[P] = Math.min(100, x.rel[P]+0.04);
+      if(x.alive && x.id!==P && !c.war.has(x.id)) x.rel[P] = Math.min(100, x.rel[P]+0.045);
     });
   });
   check(); dirty=1; ui();
@@ -874,16 +950,21 @@ function missile(nk){
   const e=launch(P,sel,nk); if(e) log(e,'x',1); ui();
 }
 function buy(k){
-  const c = k==='nuk' ? 1700 : 240, A=C[P];
+  const costs = {nuk:1750, mis:250, plane:180};
+  const c = costs[k] || 250, A=C[P];
   if(k==='nuk' && !NK.has(A.name)) return log('Only nuclear powers can build nukes','x',1);
   if(A.money < c) return log('Not enough money','x');
-  A.money -= c; A[k==='nuk'?'nuk':'mis']++; ui();
+  A.money -= c;
+  if(k==='nuk') A.nuk++;
+  else if(k==='mis') A.mis++;
+  else if(k==='plane') A.planes = (A.planes||0)+1;
+  ui();
 }
 function dip(k,id){
   const p=C[P], t=C[id];
   if(k==='gift'){
-    if(p.money < 140) return log('Not enough money','x');
-    p.money -= 140; t.rel[P] = Math.min(100, t.rel[P]+9);
+    if(p.money < 150) return log('Not enough money','x');
+    p.money -= 150; t.rel[P] = Math.min(100, t.rel[P]+10);
     log(`🎁 ${t.name} appreciates your gift (trust ${t.rel[P]|0})`,'g');
   } else if(k==='ally'){
     if(t.dn[P] > day) log(`${t.name} won't talk until day ${t.dn[P]}`,'x',1);
@@ -891,10 +972,10 @@ function dip(k,id){
       const [pr,why] = allyCheck(P,id);
       if(!pr) log(`❌ ${t.name} ${why}`,'w',1);
       else if(Math.random() < pr){ ally(P,id); log(`🤝 ${t.name} ACCEPTED your alliance!`,'g',1); }
-      else { t.dn[P]=day+10; log(`❌ ${t.name} DENIED your alliance.`,'w',1); }
+      else { t.dn[P]=day+12; log(`❌ ${t.name} DENIED your alliance.`,'w',1); }
     }
   } else if(k==='peace'){
-    const chance = (str(id) < str(P)*1.15 ? 0.55 : 0.18) + (t.war.size>1 ? 0.18 : 0);
+    const chance = (str(id) < str(P)*1.2 ? 0.58 : 0.16) + (t.war.size>1 ? 0.2 : 0);
     if(Math.random() < chance) peace(P,id);
     else log(`❌ ${t.name} rejects a ceasefire.`,'w',1);
   } else if(k==='war'){
@@ -910,13 +991,14 @@ const B = (l,f,d) => `<button ${d?'disabled':''} onclick="${f}">${l}</button>`;
 function ui(){
   const T=$('#hud'), Sd=$('#side');
   if(P===null){
-    T.innerHTML = '<b>🌍 WORLD AT WAR 3</b> — scroll to zoom · drag to pan · <b>click a country</b> to take command';
+    T.innerHTML = '<b>🌍 WORLD AT WAR 3</b> — scroll zoom · drag pan · <b>click a country</b> to command';
     Sd.innerHTML = `<h3>How to play</h3>
-• Each country has <b>regions</b>. A nation dies only when its last region falls. Win by holding ${WIN} of ${Rg.length} regions.<br>
-• <b>Click your region</b> → click adjacent to send troops. Pick % in top bar. Right-click or 🔍 to inspect.<br>
-• <b>Combat:</b> both sides lose troops daily. Defenders get terrain + forts + capital bonus. Hover for live odds.<br>
-• Income is fair for everyone. Unrest after capture. Alliances need trust ≥38 (max 3).<br>
-• AIs now declare wars on their own and spam far fewer alliance/peace offers.`;
+• Countries control <b>regions</b>. A nation dies when its last region falls. Win by holding ${WIN} of ${Rg.length} regions.<br>
+• <b>Click your region</b> → adjacent (or sea/air) to send troops. Pick % in top bar. Right-click or 🔍 to inspect.<br>
+• <b>Combat:</b> troops clash daily with animations. Forts + capital + terrain help defenders.<br>
+• Sea travel is now much better connected. Build <b>ports</b> and <b>airbases</b>. Use planes for airlifts.<br>
+• Income from mines & ports. Unrest after capture. Alliances need trust ≥38 (max 3).<br>
+• <b>Settings (⚙️)</b> — turn off diplomacy requests if they annoy you.`;
     return;
   }
   const p = C[P];
@@ -924,7 +1006,7 @@ function ui(){
     <span class="tag">Day ${day}</span>
     <span class="tag">💰 <b>$${p.money|0}</b> (+${incT(P)}/d)</span>
     <span class="tag">🪖 ${p.tt|0}</span>
-    <span class="tag">🚀${p.mis} ☢${p.nuk}</span>
+    <span class="tag">🚀${p.mis} ☢${p.nuk} ✈️${p.planes||0}</span>
     <span class="tag">🌍 ${own(P).length}/${WIN}</span>
     <span style="flex:1"></span>
     Send: ${[0.25,0.5,0.7,1].map(f=>`<button class="${f===frac?'on':''}" onclick="frac=${f};ui()">${f*100|0}%</button>`).join('')}
@@ -935,7 +1017,7 @@ function ui(){
     `<button class="${tab===i?'on':''}" onclick="tab=${i};ui()">${n}</button>`).join('')}</div><hr>`;
 
   if(tab===0){
-    if(sel<0) h += 'Click one of your regions, then an adjacent region to send troops.';
+    if(sel<0) h += 'Click one of your regions, then an adjacent (or sea-linked) region to send troops. Airbases enable longer airlifts.';
     else {
       const r=Rg[sel], O=C[r.o], b=r.b, mine=r.o===P;
       h += `<h3>${r.nm}</h3>
@@ -949,16 +1031,25 @@ function ui(){
       if(r.inv.length) h += `<br>⚔ <b>Under attack</b>: ${r.inv.reduce((s,v)=>s+v.n,0)|0} invaders`;
       if(mine){
         h += `<hr>` + Object.keys(COST).map(k =>
-          B(`${ICON[k]} ${{mine:'Mine +$11/d',fact:'Factory +1.25 troops/d',fort:'Fort +38% def',silo:'Missile silo'}[k]} $${cost(k,r)}`,
+          B(`${ICON[k]} ${{mine:'Mine +$12/d',fact:'Factory +1.3 troops/d',fort:'Fort +40% def',silo:'Missile silo',port:'Port +$4/d +naval',air:'Airbase +airlift'}[k]} $${cost(k,r)}`,
             `build('${k}')`, b[k]>=3||p.money<cost(k,r))).join('<br>') +
-          `<br>${B('🪖 +12 $48','recruit(12,48)',p.money<48)}${B('🪖 +55 $200','recruit(55,200)',p.money<200)}`;
+          `<br>${B('🪖 +14 $52','recruit(14,52)',p.money<52)}${B('🪖 +60 $210','recruit(60,210)',p.money<210)}`;
       } else {
-        const src = r.nb.map(z=>Rg[z[0]]).filter(x=>x.o===P&&x.troops>=2).sort((x,y)=>y.troops-x.troops).slice(0,4);
+        const src = r.nb.map(z=>Rg[z[0]]).filter(x=>x.o===P&&x.troops>=2).sort((x,y)=>y.troops-x.troops).slice(0,5);
         if(src.length && !p.al.has(r.o)){
           h += `<hr><b>⚔ Attack from</b><br>` + src.map(x=>{
             const n=x.troops*0.7, e=r.troops*defm(r);
             return `<small>${x.nm} 🪖${x.troops|0}</small> ${B('70%',`act(${x.i},${r.i})`)} <small>odds ${(n/e).toFixed(2)}</small>`;
           }).join('<br>');
+        }
+        // airlift option
+        if((p.planes||0) > 0 || own(P).some(rr => rr.b.air > 0)){
+          const airSrc = own(P).filter(x => x.troops >= 8).sort((a,b)=>b.troops-a.troops).slice(0,3);
+          if(airSrc.length && !p.al.has(r.o)){
+            h += `<hr><b>✈️ Airlift from</b><br>` + airSrc.map(x =>
+              `<small>${x.nm} 🪖${x.troops|0}</small> ${B('Airlift',`airlift(${x.i},${r.i},${frac});ui()`)}`
+            ).join('<br>');
+          }
         }
         h += `<hr>${B(`🚀 Missile (${p.mis})`,'missile(0)',!p.mis)}${B(`☢ Nuke (${p.nuk})`,'missile(1)',!p.nuk)}<br><small>Needs one of your silos.</small>`;
       }
@@ -966,30 +1057,30 @@ function ui(){
   } else if(tab===1){
     const nbr = new Set();
     own(P).forEach(r => r.nb.forEach(z => { if(Rg[z[0]].o!==P) nbr.add(Rg[z[0]].o); }));
-    h += `Alliances: ${p.al.size}/3<br><small>Allies join wars. Trust ≥38 needed.</small>` +
+    h += `Alliances: ${p.al.size}/3<br><small>Allies join wars. Trust ≥38 needed. Use ⚙️ to disable spam.</small>` +
       C.filter(c=>c.alive&&c.id!==P)
         .sort((a,b)=> (nbr.has(b.id)-nbr.has(a.id)) || (str(b.id)-str(a.id)))
-        .slice(0,45)
+        .slice(0,48)
         .map(c=>{
           const rl=c.rel[P], al=p.al.has(c.id), w=p.war.has(c.id);
           return `<div class="row"><b style="color:${c.col}">${c.name}</b> ${al?'🤝':w?'⚔':''}${nbr.has(c.id)?' 📍':''}
             <div class="bar"><i style="width:${(rl+100)/2}%;background:${rl>=38?'#5c8':rl<-25?'#e55':'#ca4'}"></i></div>
             <small>trust ${rl|0} · 🪖${c.tt|0} · ${own(c.id).length} reg</small><br>
-            ${B('🎁 $140',`dip('gift',${c.id})`,p.money<140)}
+            ${B('🎁 $150',`dip('gift',${c.id})`,p.money<150)}
             ${B('🤝',`dip('ally',${c.id})`,al||w)}
             ${B('🕊',`dip('peace',${c.id})`,!w)}
             ${B('⚔',`dip('war',${c.id})`,w)}</div>`;
         }).join('');
   } else if(tab===2){
     h += `<h3>Arsenal</h3>
-      ${B('🚀 Missile $240',"buy('mis')",p.money<240)}
-      ${B('☢ Nuke $1700',"buy('nuk')",p.money<1700||!NK.has(p.name))}<br>
-      <small>Missiles ${p.mis} · Nukes ${p.nuk} · Silos ${own(P).reduce((s,r)=>s+r.b.silo,0)}
+      ${B('🚀 Missile $250',"buy('mis')",p.money<250)}
+      ${B('☢ Nuke $1750',"buy('nuk')",p.money<1750||!NK.has(p.name))}
+      ${B('✈️ Plane $180',"buy('plane')",p.money<180)}<br>
+      <small>Missiles ${p.mis} · Nukes ${p.nuk} · Planes ${p.planes||0} · Silos ${own(P).reduce((s,r)=>s+r.b.silo,0)} · Airbases ${own(P).reduce((s,r)=>s+r.b.air,0)}
       ${NK.has(p.name)?'':' · only nuclear powers build nukes'}</small>
       <hr>At war with: ${[...p.war].map(i=>C[i].name).join(', ')||'nobody'}<br>
       Allies: ${[...p.al].map(i=>C[i].name).join(', ')||'none'}`;
   } else {
-    // Leaderboard
     const alive = C.filter(c => c.alive);
     const byReg = [...alive].sort((a,b) => own(b.id).length - own(a.id).length);
     const byCash = [...alive].sort((a,b) => b.money - a.money);
@@ -1036,7 +1127,7 @@ function resize(){
 addEventListener('resize', resize);
 
 function zoomAt(sx,sy,f){
-  const nz = Math.max(minZ, Math.min(14, z*f));
+  const nz = Math.max(minZ, Math.min(16, z*f));
   vx = sx - (sx-vx)*nz/z;
   vy = sy - (sy-vy)*nz/z;
   z = nz;
@@ -1054,18 +1145,18 @@ function paint(){
   Rg.forEach(r => {
     const c = C[r.o];
     O[r.i] = r.o;
-    let [R_,G,B_] = hsl(c.h, c.s, c.l + ((r.i*7)%5 - 2)*1.4);
-    if(r.rad > 0){ G = Math.min(255, G+80); R_ *= 0.75; }
+    let [R_,G,B_] = hsl(c.h, c.s, c.l + ((r.i*7)%5 - 2)*1.3);
+    if(r.rad > 0){ G = Math.min(255, G+90); R_ *= 0.7; B_ *= 0.75; }
     let m=0, rd=0;
-    if(r.i===sel) m=0.42;
-    else if(r.i===hov) m=0.18;
-    else if(tg.has(r.i)){ if(r.o!==P) rd=0.28; else m=0.1; }
+    if(r.i===sel) m=0.45;
+    else if(r.i===hov) m=0.2;
+    else if(tg.has(r.i)){ if(r.o!==P) rd=0.3; else m=0.12; }
     if(m){ R_+=(255-R_)*m; G+=(255-G)*m; B_+=(255-B_)*m; }
     if(rd){ R_+=(255-R_)*rd; G*=1-rd; B_*=1-rd; }
     base[r.i] = pk(R_,G,B_);
-    e1[r.i] = pk(R_,G,B_,0.68);
-    e2[r.i] = pk(R_,G,B_,0.8);
-    e3[r.i] = pk(R_,G,B_,0.38);
+    e1[r.i] = pk(R_,G,B_,0.65);
+    e2[r.i] = pk(R_,G,B_,0.78);
+    e3[r.i] = pk(R_,G,B_,0.35);
   });
   for(let y=0,i=0; y<H; y++){
     for(let x=0; x<W; x++,i++){
@@ -1104,8 +1195,8 @@ cv.addEventListener('pointermove', e => {
       if(P!==null && sel>=0 && Rg[sel].o===P && r.o!==P && Rg[sel].nb.some(z=>z[0]===h)){
         const n = Rg[sel].troops * frac, e2 = r.troops * defm(r), q = n/e2;
         s += `<br>Your ${n|0} vs ${e2|0} def<br>Odds <b>${q.toFixed(2)}</b> — ${
-          q>1.55?'<span style="color:#8fe9b0">strong</span>':
-          q>1.12?'<span style="color:#ffcc66">risky</span>':
+          q>1.6?'<span style="color:#8fe9b0">strong</span>':
+          q>1.15?'<span style="color:#ffcc66">risky</span>':
           '<span style="color:#ff8a80">likely fail</span>'}`;
       }
       t.style.display='block'; t.style.left=(mxp+14)+'px'; t.style.top=(myp+14)+'px'; t.innerHTML=s;
@@ -1139,11 +1230,32 @@ function click(sx,sy){
 }
 
 function draw(dt, t){
-  // sky gradient
+  // deeper ocean gradient
   const g = ctx.createLinearGradient(0,0,0,ch);
-  g.addColorStop(0,'#0c4a78'); g.addColorStop(1,'#061e38');
+  g.addColorStop(0,'#0a3d6a'); g.addColorStop(0.6,'#062a4a'); g.addColorStop(1,'#031820');
   ctx.setTransform(dpr,0,0,dpr,0,0);
   ctx.fillStyle=g; ctx.fillRect(0,0,cw,ch);
+
+  // Animated sea overlay
+  if(settings.animatedSea){
+    seaOffset += dt * 18;
+    ctx.save();
+    ctx.setTransform(dpr*z, 0, 0, dpr*z, dpr*vx, dpr*vy);
+    ctx.globalAlpha = 0.12;
+    ctx.strokeStyle = '#4af';
+    ctx.lineWidth = 1.5 / z;
+    for(let y=0; y<H; y+=28){
+      ctx.beginPath();
+      for(let x=0; x<W; x+=12){
+        const wave = Math.sin((x + seaOffset)*0.018 + y*0.01) * 4 + Math.sin((x - seaOffset*0.7)*0.012)*3;
+        const yy = y + wave;
+        x===0 ? ctx.moveTo(x, yy) : ctx.lineTo(x, yy);
+      }
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+    ctx.restore();
+  }
 
   C.forEach(c => { c.tt=0; c.lab=null; });
   Rg.forEach(r => {
@@ -1154,131 +1266,177 @@ function draw(dt, t){
 
   if(dirty) paint();
 
-  // crisp rendering when zoomed in
-  ctx.imageSmoothingEnabled = z < 2.2;
+  ctx.imageSmoothingEnabled = z < 2.4;
   ctx.setTransform(dpr*z, 0, 0, dpr*z, dpr*vx, dpr*vy);
   const lw = 1/z;
 
   // subtle grid
-  ctx.strokeStyle = 'rgba(255,255,255,0.045)';
+  ctx.strokeStyle = 'rgba(255,255,255,0.035)';
   ctx.lineWidth = lw;
   ctx.beginPath();
   for(let lo=-150; lo<=180; lo+=30){ const x=(lo+170)*S; ctx.moveTo(x,0); ctx.lineTo(x,H); }
   for(let la=-30; la<=70; la+=30){ const y=(84-la)*S; ctx.moveTo(0,y); ctx.lineTo(W,y); }
   ctx.stroke();
 
-  // map with soft shadow
-  ctx.shadowColor = 'rgba(0,0,0,0.4)';
-  ctx.shadowBlur = 8;
+  // map
+  ctx.shadowColor = 'rgba(0,0,0,0.45)';
+  ctx.shadowBlur = 10;
   ctx.drawImage(off, 0, 0);
   ctx.shadowBlur = 0;
 
-  // troop movements (improved trail)
+  // region details (trees, houses, buildings) when zoomed
+  if(z > 2.8 && settings.animations){
+    for(const r of Rg){
+      if(Math.hypot(r.cx*z+vx - cw/2, r.cy*z+vy - ch/2) > Math.max(cw,ch)*0.9) continue;
+      // buildings
+      const b = r.b;
+      let bx = r.cx - 8, by = r.cy + 6;
+      if(b.mine){ ctx.font = `${11*lw*1.4}px serif`; ctx.fillText('⛏', bx, by); bx+=10; }
+      if(b.fact){ ctx.font = `${11*lw*1.4}px serif`; ctx.fillText('🏭', bx, by); bx+=11; }
+      if(b.fort){ ctx.font = `${11*lw*1.4}px serif`; ctx.fillText('🧱', bx, by); bx+=10; }
+      if(b.silo){ ctx.font = `${11*lw*1.4}px serif`; ctx.fillText('🚀', bx, by); bx+=11; }
+      if(b.port){ ctx.font = `${11*lw*1.4}px serif`; ctx.fillText('⚓', bx, by); bx+=10; }
+      if(b.air){ ctx.font = `${11*lw*1.4}px serif`; ctx.fillText('✈️', bx, by); }
+      // small details
+      for(const d of r.details){
+        ctx.globalAlpha = 0.55;
+        if(d.t==='tree'){ ctx.fillStyle='#2a5'; ctx.beginPath(); ctx.arc(d.x,d.y,2.2*lw,0,7); ctx.fill(); }
+        else if(d.t==='house'){ ctx.fillStyle='#c96'; ctx.fillRect(d.x-1.5*lw,d.y-1.5*lw,3*lw,3*lw); }
+        else { ctx.fillStyle='#789'; ctx.beginPath(); ctx.arc(d.x,d.y,1.4*lw,0,7); ctx.fill(); }
+      }
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  // troop movements — improved animated trails + icons
   for(const m of M){
     const f=Rg[m.f], e=Rg[m.t];
     const p = Math.min(1, (gt-m.st)/(m.arr-m.st));
+    const x = f.cx + (e.cx-f.cx)*p, y = f.cy + (e.cy-f.cy)*p;
     ctx.strokeStyle = C[m.o].col;
-    ctx.lineWidth = 2.2 * lw;
-    ctx.setLineDash([7*lw, 5*lw]);
+    ctx.lineWidth = 2.4 * lw;
+    ctx.setLineDash([8*lw, 5*lw]);
     ctx.beginPath(); ctx.moveTo(f.cx,f.cy); ctx.lineTo(e.cx,e.cy); ctx.stroke();
     ctx.setLineDash([]);
-    const x = f.cx + (e.cx-f.cx)*p, y = f.cy + (e.cy-f.cy)*p;
+
     // glow
-    ctx.fillStyle = 'rgba(255,255,255,0.35)';
-    ctx.beginPath(); ctx.arc(x,y,6.5*lw,0,7); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.beginPath(); ctx.arc(x,y,7*lw,0,7); ctx.fill();
     ctx.fillStyle = C[m.o].col;
-    ctx.beginPath(); ctx.arc(x,y,3.8*lw,0,7); ctx.fill();
+    ctx.beginPath(); ctx.arc(x,y,4*lw,0,7); ctx.fill();
+
+    // type icon
+    ctx.font = `${12*lw}px serif`;
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#fff';
+    const icon = m.type==='plane' ? '✈️' : m.type==='ship' ? '🚢' : '🪖';
+    ctx.fillText(icon, x, y - 9*lw);
   }
 
-  // missiles / nukes / explosions
+  // missiles / nukes / explosions — much nicer
   fx = fx.filter(f => {
     f.t += dt;
     const p = Math.min(1, f.t/f.d);
     if(f.k==='m' || f.k==='n'){
-      const hh = f.k==='n' ? 55 : 32;
+      const hh = f.k==='n' ? 70 : 38;
       const x = f.x1+(f.x2-f.x1)*p;
       const y = f.y1+(f.y2-f.y1)*p - Math.sin(Math.PI*p)*hh;
-      for(let i=1;i<10;i++){
-        const u = Math.max(0, p - i*0.025);
-        ctx.fillStyle = `rgba(255,${f.k==='n'?110:190},50,${0.55-i*0.05})`;
+      // long trail
+      for(let i=1;i<14;i++){
+        const u = Math.max(0, p - i*0.022);
+        const tx = f.x1+(f.x2-f.x1)*u;
+        const ty = f.y1+(f.y2-f.y1)*u - Math.sin(Math.PI*u)*hh;
+        ctx.fillStyle = `rgba(255,${f.k==='n'?90:180},40,${0.6-i*0.04})`;
         ctx.beginPath();
-        ctx.arc(f.x1+(f.x2-f.x1)*u, f.y1+(f.y2-f.y1)*u - Math.sin(Math.PI*u)*hh, (4.5-i*0.35)*lw*2, 0,7);
+        ctx.arc(tx, ty, (5.5-i*0.3)*lw*1.8, 0,7);
         ctx.fill();
       }
-      ctx.fillStyle = f.k==='n' ? '#ff4' : '#fff';
-      ctx.beginPath(); ctx.arc(x,y,(f.k==='n'?8:4.5)*lw*1.5,0,7); ctx.fill();
+      // head
+      ctx.fillStyle = f.k==='n' ? '#ff3' : '#fff';
+      ctx.beginPath(); ctx.arc(x,y,(f.k==='n'?9:5)*lw*1.6,0,7); ctx.fill();
+      if(f.k==='n'){
+        ctx.fillStyle = '#f80';
+        ctx.beginPath(); ctx.arc(x,y,5*lw,0,7); ctx.fill();
+      }
     } else {
-      // explosion ring
-      ctx.fillStyle = `rgba(255,${160-100*p},30,${1-p})`;
+      // bigger explosion
+      const alpha = 1-p;
+      ctx.fillStyle = `rgba(255,${140-90*p},20,${alpha})`;
       ctx.beginPath(); ctx.arc(f.x1,f.y1, f.R*p, 0,7); ctx.fill();
-      ctx.strokeStyle = `rgba(255,200,80,${0.6-p*0.6})`;
-      ctx.lineWidth = 3*lw;
-      ctx.beginPath(); ctx.arc(f.x1,f.y1, f.R*p*1.15, 0,7); ctx.stroke();
+      ctx.strokeStyle = `rgba(255,210,80,${0.7-p*0.7})`;
+      ctx.lineWidth = 4*lw;
+      ctx.beginPath(); ctx.arc(f.x1,f.y1, f.R*p*1.2, 0,7); ctx.stroke();
+      if(f.k==='b' && p > 0.3){
+        ctx.fillStyle = `rgba(255,255,200,${(1-p)*0.5})`;
+        ctx.beginPath(); ctx.arc(f.x1,f.y1, f.R*p*0.4, 0,7); ctx.fill();
+      }
     }
     if(f.t >= f.d){ f.cb && f.cb(); return false; }
     return true;
   });
 
   // particles
-  particles = particles.filter(p => {
-    p.life -= dt; p.x += p.vx*dt; p.y += p.vy*dt; p.vy += 25*dt;
-    if(p.life <= 0) return false;
-    ctx.globalAlpha = Math.min(1, p.life*1.4);
-    ctx.fillStyle = p.col;
-    ctx.beginPath(); ctx.arc(p.x, p.y, p.size*lw, 0,7); ctx.fill();
-    ctx.globalAlpha = 1;
-    return true;
-  });
+  if(settings.particles){
+    particles = particles.filter(p => {
+      p.life -= dt; p.x += p.vx*dt; p.y += p.vy*dt; p.vy += 28*dt;
+      if(p.life <= 0) return false;
+      ctx.globalAlpha = Math.min(1, p.life*1.5);
+      ctx.fillStyle = p.col;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.size*lw, 0,7); ctx.fill();
+      ctx.globalAlpha = 1;
+      return true;
+    });
+  }
 
   // labels
   ctx.setTransform(dpr,0,0,dpr,0,0);
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.shadowColor = '#000'; ctx.shadowBlur = 3;
+  ctx.shadowColor = '#000'; ctx.shadowBlur = 3.5;
 
-  if(z < 2.5){
+  if(z < 2.6){
     C.forEach(c => {
       if(!c.alive || !c.lab) return;
       const x = c.lab.cx*z + vx, y = c.lab.cy*z + vy;
-      if(x<-70||x>cw+70||y<-25||y>ch+25) return;
-      if(z < 1.15 && c.pw < 2 && c.id !== P) return;
-      ctx.font = `bold ${Math.min(15, 8+z*3.2)|0}px system-ui`;
+      if(x<-80||x>cw+80||y<-30||y>ch+30) return;
+      if(z < 1.2 && c.pw < 2 && c.id !== P) return;
+      ctx.font = `bold ${Math.min(16, 8.5+z*3.4)|0}px system-ui`;
       ctx.fillStyle = '#fff';
       ctx.fillText(c.name, x, y);
-      ctx.font = `${Math.min(12, 7+z*2.6)|0}px system-ui`;
+      ctx.font = `${Math.min(13, 7.5+z*2.8)|0}px system-ui`;
       ctx.fillStyle = '#ffe9a0';
-      ctx.fillText('🪖'+(c.tt|0), x, y+12);
+      ctx.fillText('🪖'+(c.tt|0), x, y+13);
     });
   } else {
     for(const r of Rg){
       const x = r.cx*z + vx, y = r.cy*z + vy;
-      if(x<-50||x>cw+50||y<-20||y>ch+20) continue;
+      if(x<-60||x>cw+60||y<-25||y>ch+25) continue;
       ctx.font = 'bold 13px system-ui';
       ctx.fillStyle = '#fff';
       ctx.fillText('🪖'+(r.troops|0), x, y);
       const s = Object.keys(r.b).map(k => r.b[k]?ICON[k]+r.b[k]:'').join('');
       ctx.font = '11px system-ui';
-      if(s) ctx.fillText(s, x, y+13);
-      if(z > 4.5){ ctx.fillStyle='#cfe'; ctx.fillText(r.nm, x, y-13); }
+      if(s) ctx.fillText(s, x, y+14);
+      if(z > 4.8){ ctx.fillStyle='#cfe'; ctx.fillText(r.nm, x, y-14); }
     }
   }
 
-  // battle markers
+  // battle markers — pulsing
   for(const r of Rg) if(r.inv.length){
     const x = r.cx*z+vx, y = r.cy*z+vy;
-    const p = 0.5 + 0.5*Math.sin(t*7);
+    const p = 0.5 + 0.5*Math.sin(t*8);
     ctx.shadowBlur = 0;
-    ctx.fillStyle = `rgba(255,50,50,${0.25+0.3*p})`;
-    ctx.beginPath(); ctx.arc(x, y-18, 11+5*p, 0,7); ctx.fill();
-    ctx.font = '17px system-ui';
+    ctx.fillStyle = `rgba(255,40,40,${0.3+0.35*p})`;
+    ctx.beginPath(); ctx.arc(x, y-20, 13+6*p, 0,7); ctx.fill();
+    ctx.font = '18px system-ui';
     ctx.fillStyle = '#fff';
-    ctx.fillText('⚔', x, y-18);
+    ctx.fillText('⚔', x, y-20);
   }
 
   ctx.shadowBlur = 0;
   if(flash > 0){
-    ctx.fillStyle = `rgba(255,255,255,${flash*0.75})`;
+    ctx.fillStyle = `rgba(255,255,255,${flash*0.8})`;
     ctx.fillRect(0,0,cw,ch);
-    flash -= dt * 1.15;
+    flash -= dt * 1.1;
   }
 }
 
@@ -1302,10 +1460,10 @@ resize(); fit(); ui();
 log('Pick your nation by clicking it.','n');
 requestAnimationFrame(loop);
 
-ask('🌍 World at War 3 — Enhanced',
-  `Sharper high-res map · better animations · smarter AI · improved combat · leaderboard · more countries.<br>
+ask('🌍 World at War 3 — Fully Enhanced',
+  `Nicer colors · animated oceans · detailed regions (buildings, trees) · better rockets & nukes · improved combat animations · denser sea travel · planes & airlifts · smarter AI · <b>settings to turn off diplomacy spam</b>.<br>
   Difficulty only changes how often AIs act. Click a country after choosing difficulty.<br>
-  <small>Scroll = zoom · drag = pan · right-click = inspect</small>`,
+  <small>Scroll = zoom · drag = pan · right-click = inspect · ⚙️ = settings</small>`,
   [
     {l:'Easy', fn:()=>diff=0},
     {l:'Normal', fn:()=>diff=1},
