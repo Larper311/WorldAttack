@@ -3,40 +3,41 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>World at War 5 — Grand Strategy</title>
+<title>World at War 6 — Grand Strategy</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#050d17;color:#e4edf6;font:13px/1.45 "Segoe UI",system-ui,sans-serif;display:flex;height:100vh;overflow:hidden}
 #main{flex:1;display:flex;flex-direction:column;min-width:0}
-#hud{display:flex;gap:7px;align-items:center;padding:7px 12px;background:#0b1928;border-bottom:1px solid #1b3350;flex-wrap:wrap}
+#hud{display:flex;gap:7px;align-items:center;padding:7px 12px;background:linear-gradient(#0f2237,#0a1827);border-bottom:1px solid #1f3b5a;flex-wrap:wrap;box-shadow:0 2px 10px #0008;z-index:7}
 #hud b{color:#ffd54a}
-.tag{background:#12273e;padding:3px 8px;border-radius:5px;font-size:12px;border:1px solid #1e3a58;display:inline-block}
+.tag{background:linear-gradient(#15304c,#10253b);padding:3px 9px;border-radius:6px;font-size:12px;border:1px solid #23446a;display:inline-block}
 #wrap{flex:1;position:relative;min-height:0;background:#07233c;overflow:hidden}
 #cv{position:absolute;inset:0;width:100%;height:100%;cursor:grab;touch-action:none}
 #cv:active{cursor:grabbing}
-#mini{position:absolute;right:12px;top:12px;width:230px;height:120px;border:1px solid #2a4a6a;border-radius:6px;z-index:6;cursor:crosshair;background:#07233c;opacity:.94}
-#tip{position:absolute;pointer-events:none;background:#06121fee;padding:7px 11px;border-radius:7px;display:none;font-size:12px;line-height:1.5;border:1px solid #2a4a6a;max-width:270px;z-index:5}
+#mini{position:absolute;right:12px;top:12px;width:230px;height:120px;border:1px solid #2f5273;border-radius:7px;z-index:6;cursor:crosshair;background:#07233c;opacity:.95;box-shadow:0 4px 14px #0009}
+#tip{position:absolute;pointer-events:none;background:#06121fee;padding:7px 11px;border-radius:8px;display:none;font-size:12px;line-height:1.5;border:1px solid #2f5273;max-width:270px;z-index:5;box-shadow:0 4px 14px #0009}
 #zb{position:absolute;left:12px;bottom:12px;display:flex;flex-direction:column;gap:4px}
-button{background:#1a4a7a;color:#fff;border:0;border-radius:5px;padding:5px 11px;cursor:pointer;font:inherit;transition:background .12s}
-button:hover{background:#2766a3}
-button:disabled{opacity:.35;cursor:default}
-button.on{background:#c48a00}
-button.ab{background:#6d2a86}
+button{background:linear-gradient(#2062a0,#1a4a7a);color:#fff;border:0;border-radius:6px;padding:5px 11px;cursor:pointer;font:inherit;transition:background .12s,transform .08s;box-shadow:0 1px 3px #0006}
+button:hover{background:linear-gradient(#2e78bf,#2766a3)}
+button:active{transform:translateY(1px)}
+button:disabled{opacity:.35;cursor:default;transform:none}
+button.on{background:linear-gradient(#e0a010,#c48a00)}
+button.ab{background:linear-gradient(#8a36a8,#6d2a86)}
 #log{height:78px;overflow:auto;background:#050d17;padding:5px 12px;font-size:11.5px;border-top:1px solid #1b3350;scrollbar-width:thin}
 #log .w{color:#ff8a80}#log .g{color:#8fe9b0}#log .n{color:#ffcc66}#log .x{color:#9ab}
-#side{width:345px;background:#0a1624;border-left:1px solid #1b3350;padding:11px;overflow:auto;line-height:1.5;scrollbar-width:thin}
+#side{width:345px;background:linear-gradient(#0c1a2b,#09141f);border-left:1px solid #1f3b5a;padding:11px;overflow:auto;line-height:1.5;scrollbar-width:thin}
 #side h3{margin:0 0 6px;font-size:14px;color:#ffd54a}
 #side hr{border:0;border-top:1px solid #1b3350;margin:9px 0}
 .row{padding:6px 0;border-bottom:1px solid #132639}
 .bar{height:5px;background:#1a3048;border-radius:3px;margin:4px 0;overflow:hidden}
 .bar i{display:block;height:100%}
 .pips{letter-spacing:2px;color:#ffd54a}
-#md{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;z-index:20}
-#mc{background:#0d2238;border:1px solid #3a6a9a;border-radius:12px;padding:22px 26px;max-width:480px;text-align:center;line-height:1.55;box-shadow:0 14px 44px #000c}
+#md{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;z-index:20;backdrop-filter:blur(2px)}
+#mc{background:linear-gradient(#112a44,#0b1e32);border:1px solid #3f739f;border-radius:13px;padding:22px 26px;max-width:480px;text-align:center;line-height:1.55;box-shadow:0 14px 44px #000c}
 #mc h2{margin:0 0 10px;font-size:20px}
 #mc button{font-size:14px;padding:8px 16px;margin:8px 4px 0}
 #toasts{position:fixed;top:58px;left:50%;transform:translateX(-50%);z-index:15;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none}
-.ts{background:#0d2740ee;border:1px solid #3a6a9a;padding:7px 16px;border-radius:8px;font-size:13px}
+.ts{background:#0d2740ee;border:1px solid #3a6a9a;padding:7px 16px;border-radius:8px;font-size:13px;box-shadow:0 4px 14px #0008}
 .ts.w{border-color:#e55}.ts.g{border-color:#5c8}
 .lb-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #132639;font-size:12px}
 .lb-rank{width:24px;color:#8ab;font-weight:600}.lb-name{flex:1}.lb-val{color:#ffd54a}
@@ -80,9 +81,10 @@ button.ab{background:#6d2a86}
 <script>
 'use strict';
 // =====================================================================
-//  WORLD AT WAR 5 — Grand Strategy
+//  WORLD AT WAR 6 — Grand Strategy
 //  Miller projection · fractal coastlines · biome + relief terrain ·
 //  organic country borders · k-means provinces · terrain-aware combat
+//  v6: animated squads, curving aircraft, real ships, Anti-air turrets
 // =====================================================================
 const S = 4.8, W = Math.round(360 * S);
 const mil = p => 1.25 * Math.log(Math.tan(Math.PI / 4 + 0.4 * p * Math.PI / 180));
@@ -98,6 +100,8 @@ const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
 const sm = (v, a, b) => { const t = clamp((v - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
 const wdx = (a, b) => { let d = b - a; if (d > W / 2) d -= W; else if (d < -W / 2) d += W; return d; };
 const wdist = (a, b) => Math.hypot(wdx(a.cx, b.cx), a.cy - b.cy);
+const angDiff = (a, b) => { let d = b - a; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI; return d; };
+const fmtN = n => n >= 1000 ? (n / 1000).toFixed(n >= 10000 ? 0 : 1) + 'k' : String(n | 0);
 
 const settings = { dipRequests: true, terrain: true, labels: true, effects: true, sound: true };
 function toggleSettings() { const p = $('#setPanel'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; }
@@ -394,8 +398,10 @@ const STP = [[65,48,20,5],[100,48,10,4],[-102,48,12,5],[-62,-36,6,5],[30,48,10,3
 // =====================================================================
 //  CONSTANTS & STATE
 // =====================================================================
-const COST = {mine:140, fact:190, fort:110, silo:380, port:160, air:220};
-const ICON = {mine:'⛏', fact:'🏭', fort:'🧱', silo:'🚀', port:'⚓', air:'✈️'};
+const COST = {mine:140, fact:190, fort:110, silo:380, port:160, air:220, aa:950};
+const MAXB = {aa:2};
+const ICON = {mine:'⛏', fact:'🏭', fort:'🧱', silo:'🚀', port:'⚓', air:'✈️', aa:'🎯'};
+const AA_R = 72, AA_DMG = 2, AA_RATE = 12, AA_ACC = .5;   // turret range (map px), dmg/bullet, shots per game-day, hit chance
 const G = [4, 3, 2];
 const TERR = {
   plains:{n:'Plains', d:1.0, i:1.12}, mountain:{n:'Mountains', d:1.32, i:.8}, desert:{n:'Desert', d:.95, i:.72},
@@ -412,7 +418,7 @@ const TECH = {
 const TC = [350, 650, 1050];
 
 let diff = 1, P = null, sel = -1, hov = -1, day = 0, gt = 0, speed = 0, lastSpeed = 1, over = 0, tab = 0, frac = 0.7, insp = 0;
-let M = [], fx = [], rings = [], mq = [], mb = [], modal = 0, flash = 0, ownVer = 0, lblDirty = 1;
+let M = [], fx = [], rings = [], bul = [], parts = [], mq = [], mb = [], modal = 0, flash = 0, ownVer = 0, lblDirty = 1, lastGun = 0;
 let dirtyAll = 0, hlDirty = 1, miniDirty = 1, mobEnd = -1, mobCd = -1, nextEv = 20;
 const dirtyR = new Set();
 let C = [], Rg = [], WIN = 0, ready = false;
@@ -562,7 +568,6 @@ function buildWorld() {
   cc = comps(CID);
 
   // ----- provinces (k-means inside each landmass piece of a country) -----
-  // Lower REG_AREA + min-2 rule so mid-size countries (Germany, Sweden, Ukraine…) are multi-province
   const AS = (6.8 / S) ** 2, REG_AREA = 1650;
   RID = new Uint16Array(W * H).fill(N);
   const regC = [], regX = [];
@@ -571,7 +576,6 @@ function buildWorld() {
     for (let t = 0; t < n; t++) { const i = px[t], x = i % W; area += wRow[(i / W) | 0]; if (x < W * .08) lo = true; else if (x > W * .92) hi = true; }
     area *= AS;
     let K = clamp(Math.round(area / REG_AREA), 1, 22);
-    // Meaningful split whenever the landmass has enough pixels (avoids 1-province Germany/Sweden/etc.)
     if (K < 2 && n >= 100) K = 2;
     if (K < 3 && n >= 280) K = 3;
     if (K < 4 && n >= 520) K = 4;
@@ -591,7 +595,7 @@ function buildWorld() {
   const cnt = new Int32Array(regC.length);
   for (let i = 0; i < W * H; i++) if (RID[i] !== N) cnt[RID[i]]++;
   const mp = new Int32Array(regC.length).fill(-1); Rg = [];
-  for (let k = 0; k < regC.length; k++) if (cnt[k]) { mp[k] = Rg.length; Rg.push({ i: Rg.length, c: regC[k], o: regC[k], cross: regX[k], n: 0, a: 0, sx: 0, sy: 0, hs: 0, hi: 0, bio: [0,0,0,0,0,0], inv: [], b: {mine:0,fact:0,fort:0,silo:0,port:0,air:0}, nb: [], troops: 0, rad: 0, un: 0 }); }
+  for (let k = 0; k < regC.length; k++) if (cnt[k]) { mp[k] = Rg.length; Rg.push({ i: Rg.length, c: regC[k], o: regC[k], cross: regX[k], n: 0, a: 0, sx: 0, sy: 0, hs: 0, hi: 0, bio: [0,0,0,0,0,0], inv: [], b: {mine:0,fact:0,fort:0,silo:0,port:0,air:0,aa:0}, nb: [], troops: 0, rad: 0, un: 0 }); }
   for (let i = 0; i < W * H; i++) if (RID[i] !== N) RID[i] = mp[RID[i]];
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
     const i = y * W + x, a = RID[i]; if (a === N) continue;
@@ -825,6 +829,7 @@ const tl = (o, k) => C[o].tech[k];
 const inc = r => (r.rad > 0 || r.un > 0) ? 0 : (2.3 + r.a / 620 + r.b.mine * 12 + (r.b.port ? 4 : 0)) * r.terr.i * (1 + .12 * tl(r.o, 'eco'));
 const incT = o => Math.round(own(o).reduce((s, r) => s + inc(r), 0));
 const cost = (k, r) => Math.round(COST[k] * (1 + .32 * r.b[k]));
+const maxB = k => MAXB[k] || 3;
 const tcap = r => 58 + r.a / 20;
 const defm = r => (1.28 + .4 * r.b.fort + (r.i === C[r.o].cap ? .3 : 0)) * r.terr.d * (1 + .07 * tl(r.o, 'def'));
 const dateStr = d => new Date(Date.UTC(2026, 0, 1 + d)).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
@@ -894,6 +899,11 @@ function warOn(a, b) {
 // =====================================================================
 //  MILITARY
 // =====================================================================
+// every moving group: land squad, ship or plane (planes can be shot down by Anti-air)
+function mkM(f, t, o, n, arr, type) {
+  const hp = 40 + n * 1.2;
+  return { f, t, o, n, n0: n, st: gt, arr, type, bs: Math.random() < .5 ? 1 : -1, hp, hpMax: hp };
+}
 function send(fi, ti, fr, isNaval, isAir) {
   const f = Rg[fi], t = Rg[ti], o = f.o;
   if (f.troops < 2) return 'Not enough troops there';
@@ -905,7 +915,7 @@ function send(fi, ti, fr, isNaval, isAir) {
   f.troops -= n;
   const dist = wdist(f, t), sea = (l && l[1]) || isNaval;
   const mult = (isAir ? .55 : sea ? 1.55 : 1) * (1 - .12 * tl(o, 'log'));
-  M.push({ f: fi, t: ti, o, n: sea ? n * .85 : n, st: gt, arr: gt + Math.max(1.1, dist / (78 * S / 6.8)) * mult, type: isAir ? 'plane' : sea ? 'ship' : 'land' });
+  M.push(mkM(fi, ti, o, sea ? n * .85 : n, gt + Math.max(1.1, dist / (78 * S / 6.8)) * mult, isAir ? 'plane' : sea ? 'ship' : 'land'));
   if (o === P) tone(sea ? 260 : 400, .08, 'square', .015);
   return '';
 }
@@ -914,7 +924,7 @@ function arrive(m) {
   if (t.o === o || C[o].al.has(t.o)) { t.troops += m.n; return; }
   if (!C[o].war.has(t.o)) { const f = Rg[m.f]; (f.o === o ? f : t).troops += m.n; return; }
   const v = t.inv.find(z => z.o === o); v ? v.n += m.n : t.inv.push({ o, n: m.n });
-  if (settings.effects) rings.push({ x: t.cx, y: t.cy, R: 14, col: '#ff7a5a', t: 0, d: .5 });
+  if (settings.effects) { rings.push({ x: t.cx, y: t.cy, R: 14, col: '#ff7a5a', t: 0, d: .5 }); burst(t.cx, t.cy, 7, '#ffb060', 70, .5); }
 }
 function battle(r) {
   let A = r.inv.reduce((s, v) => s + v.n, 0);
@@ -933,7 +943,7 @@ function capture(r, o, n) {
   setOwner(r, o); r.troops = Math.max(1.8, n); r.inv = []; r.b.fort = 0; r.un = 5;
   const loot = Math.floor(O.money * .045); O.money -= loot; Nw.money += loot;
   log(`🚩 ${Nw.name} captured ${r.nm} from ${O.name}`, 'w', old === P || o === P);
-  if (settings.effects) rings.push({ x: r.cx, y: r.cy, R: 34, col: Nw.col, t: 0, d: .8 });
+  if (settings.effects) { rings.push({ x: r.cx, y: r.cy, R: 34, col: Nw.col, t: 0, d: .8 }); burst(r.cx, r.cy, 14, Nw.col, 90, .8); }
   if (o === P) [523, 659, 784].forEach((f, i) => setTimeout(() => tone(f, .13, 'triangle', .04), i * 80));
   if (r.i === O.cap) {
     log(`💥 ${O.name}'s capital has fallen!`, 'w', 1);
@@ -965,6 +975,7 @@ function impact(a, ti, nuke) {
     log(`📡 ${D.name}'s air defense intercepted ${A.name}'s ${nuke ? 'nuclear missile' : 'missile'}!`, 'g', t.o === P || a === P); return;
   }
   rings.push({ x: t.cx, y: t.cy, R: nuke ? 80 : 26, col: '#ffb040', t: 0, d: nuke ? 1.6 : .8 });
+  burst(t.cx, t.cy, nuke ? 34 : 14, nuke ? '#ffc070' : '#ffa040', nuke ? 150 : 90, nuke ? 1.4 : .8);
   if (nuke) {
     t.troops *= .18; for (const k in t.b) t.b[k] >>= 1; t.rad = 40;
     t.nb.forEach(([j]) => { if (Rg[j].o === t.o) Rg[j].troops *= .68; });
@@ -986,8 +997,83 @@ function airlift(fi, ti, fr) {
   const to = Rg[ti].o;
   if (to !== f.o) { if (A.al.has(to)) return 'Cannot attack an ally'; if (!A.war.has(to)) warOn(f.o, to); }
   f.troops -= n; if (A.planes > 0) A.planes--;
-  M.push({ f: fi, t: ti, o: f.o, n: n * .9, st: gt, arr: gt + Math.max(.95, wdist(f, Rg[ti]) / (120 * S / 6.8)) * (1 - .12 * tl(f.o, 'log')), type: 'plane' });
+  M.push(mkM(fi, ti, f.o, n * .9, gt + Math.max(.95, wdist(f, Rg[ti]) / (120 * S / 6.8)) * (1 - .12 * tl(f.o, 'log')), 'plane'));
   return '';
+}
+
+// =====================================================================
+//  FLIGHT PATHS (curved), ANTI-AIR TURRETS, PARTICLES
+// =====================================================================
+// quadratic bezier per moving group — planes bank through wide arcs, ships swing gently, squads march straight
+function track(m) {
+  if (m.g) return m.g;
+  const f = Rg[m.f], e = Rg[m.t], ex = f.cx + wdx(f.cx, e.cx), ey = e.cy, dx = ex - f.cx, dy = ey - f.cy, L = Math.hypot(dx, dy) || 1;
+  const bend = (m.type === 'plane' ? .24 : m.type === 'ship' ? .11 : 0) * m.bs;
+  return m.g = { x0: f.cx, y0: f.cy, x1: (f.cx + ex) / 2 - dy * bend, y1: (f.cy + ey) / 2 + dx * bend, x2: ex, y2: ey, L };
+}
+function at(m, p) { const g = track(m), u = 1 - p; return [u * u * g.x0 + 2 * u * p * g.x1 + p * p * g.x2, u * u * g.y0 + 2 * u * p * g.y1 + p * p * g.y2]; }
+function hd(m, p) { const g = track(m), u = 1 - p; return Math.atan2(2 * u * (g.y1 - g.y0) + 2 * p * (g.y2 - g.y1), 2 * u * (g.x1 - g.x0) + 2 * p * (g.x2 - g.x1)); }
+const prog = m => clamp((gt - m.st) / (m.arr - m.st), 0, 1);
+const easeP = (m, p) => m.type === 'plane' ? .15 * p * p * (3 - 2 * p) + .85 * p : p;
+const planePos = m => at(m, easeP(m, prog(m)));
+const turPos = (r, k, n) => { const s = 1 / Math.max(z, .35); return [r.cx + (k - (n - 1) / 2) * 13 * s, r.cy - 10 * s]; };
+
+function burst(x, y, n, col, spd, life) {
+  if (!settings.effects) return;
+  for (let i = 0; i < n; i++) {
+    const a = Math.random() * 6.283, v = (.3 + Math.random() * .7) * spd;
+    parts.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, t: 0, d: life * (.6 + Math.random() * .6), r: 1.4 + Math.random() * 1.6, col, grow: 1.2 });
+  }
+}
+function crash(m, r) {
+  const q = planePos(m), i = M.indexOf(m); if (i >= 0) M.splice(i, 1);
+  m.n = 0;
+  if (settings.effects) {
+    rings.push({ x: q[0], y: q[1], R: 16, col: '#ffb040', t: 0, d: .6 });
+    for (let k = 0; k < 10; k++) parts.push({ x: q[0], y: q[1], vx: (Math.random() - .5) * 40, vy: -Math.random() * 30, t: 0, d: 1.1 + Math.random() * .8, r: 2 + Math.random() * 2.5, col: k < 4 ? '#ffa040' : '#5a6068', grow: 2.2 });
+  }
+  log(`🎯 ${C[r.o].name}'s anti-air shot down a ${C[m.o].name} airlift near ${r.nm}`, 'g', r.o === P || m.o === P);
+}
+function updateTurrets(dg, dt) {
+  const pls = dg > 0 ? M.filter(m => m.type === 'plane' && m.hp > 0) : [];
+  for (const r of Rg) {
+    const n = r.b.aa;
+    if (!n) { if (r.tur) r.tur = null; continue; }
+    if (!r.tur) r.tur = [];
+    while (r.tur.length < n) r.tur.push({ a: -Math.PI / 2, fl: 0, cd: Math.random() * .1, sp: 0, live: 0 });
+    r.tur.length = n;
+    const A = C[r.o];
+    for (let k = 0; k < n; k++) {
+      const T = r.tur[k], [tx, ty] = turPos(r, k, n);
+      T.fl = Math.max(0, T.fl - dt * 12);
+      let best = null, bd = AA_R * AA_R;
+      for (const m of pls) {
+        if (m.hp <= 0 || m.o === r.o || A.al.has(m.o) || !A.war.has(m.o)) continue;
+        const q = planePos(m), dx = wdx(tx, q[0]), dy = q[1] - ty, d = dx * dx + dy * dy;
+        if (d < bd) { bd = d; best = { m, dx, dy, q }; }
+      }
+      if (!best) { T.live = Math.max(0, T.live - dt * 3); continue; }
+      const want = Math.atan2(best.dy, best.dx);
+      T.a += angDiff(T.a, want) * Math.min(1, dg * 5.5);
+      if (Math.abs(angDiff(T.a, want)) > .3) continue;
+      T.live = 1; T.sp += dt * 40;
+      T.cd -= dg;
+      let guard = 0;
+      while (T.cd <= 0 && guard++ < 6) {
+        T.cd += 1 / AA_RATE; T.fl = 1;
+        const m = best.m; if (m.hp <= 0) break;
+        const s = 1 / z, mx = tx + Math.cos(T.a) * 10 * s, my = ty + Math.sin(T.a) * 10 * s, hit = Math.random() < AA_ACC, jit = hit ? 2 * s : 16 * s;
+        const px = tx + best.dx + (Math.random() - .5) * jit, py = ty + best.dy + (Math.random() - .5) * jit;
+        if (bul.length < 160) bul.push({ x1: mx, y1: my, x2: px, y2: py, t: 0 });
+        const now = performance.now(); if (now - lastGun > 70 && (r.o === P || m.o === P)) { lastGun = now; tone(520 + rnd(240), .03, 'square', .007); }
+        if (hit) {
+          m.hp -= AA_DMG; m.n = m.n0 * Math.max(0, m.hp / m.hpMax);
+          if (settings.effects && Math.random() < .5) parts.push({ x: best.q[0], y: best.q[1], vx: (Math.random() - .5) * 30, vy: (Math.random() - .5) * 30, t: 0, d: .35, r: 1.6, col: '#ffe08a', grow: .5 });
+          if (m.hp <= 0) { crash(m, r); break; }
+        }
+      }
+    }
+  }
 }
 
 // =====================================================================
@@ -1003,8 +1089,9 @@ function ai(o) {
       if (fronts.includes(r) && r.b.fort < 2 && w < .45) k = 'fort';
       else if (w < .35) k = 'mine'; else if (w < .55) k = 'fact';
       else if (w < .72 && A.pw >= 2) k = 'port'; else if (w < .85 && A.pw >= 3) k = 'air';
+      else if (w < .92 && A.pw >= 3 && A.money > 1500) k = 'aa';
       else k = A.pw >= 3 ? 'silo' : 'mine';
-      if (r.b[k] < 3 && A.money > cost(k, r)) { A.money -= cost(k, r); r.b[k]++; }
+      if (r.b[k] < maxB(k) && A.money > cost(k, r)) { A.money -= cost(k, r); r.b[k]++; }
       else if (A.money > 300 && Math.random() < .4) { A.money -= 52; r.troops += 13; }
     }
   }
@@ -1122,7 +1209,7 @@ function check() {
 // =====================================================================
 function build(k) {
   const r = Rg[sel]; if (!r || r.o !== P) return; const c = cost(k, r);
-  if (r.b[k] >= 3 || C[P].money < c) return log('Cannot build that', 'x');
+  if (r.b[k] >= maxB(k) || C[P].money < c) return log('Cannot build that', 'x');
   C[P].money -= c; r.b[k]++; ui();
 }
 function recruit(n, c) { const r = Rg[sel]; if (!r || r.o !== P || C[P].money < c) return log('Not enough money', 'x'); C[P].money -= c; r.troops += n; ui(); }
@@ -1183,13 +1270,14 @@ function ui() {
   if (!ready) return;
   const T = $('#hud'), Sd = $('#side');
   if (P === null) {
-    T.innerHTML = '<b>🌍 WORLD AT WAR 5</b> <span class="tag">Click a country to take command</span>';
+    T.innerHTML = '<b>🌍 WORLD AT WAR 6</b> <span class="tag">Click a country to take command</span>';
     Sd.innerHTML = `<h3>How to play</h3>
 • The world is split into <b>provinces</b> (most countries have several). A nation falls when its last province is taken. Hold <b>${WIN}</b> of ${Rg.length} to win.<br>
 • <b>Click your province</b>, then a neighbouring one (land or sea crossing) to send troops. Choose 25–100% in the top bar.<br>
 • <b>Terrain matters</b>: mountains, jungle and forest favour defenders; plains and farmland earn more; desert and arctic earn less.<br>
 • Forts, the capital and <b>Fortification Doctrine</b> raise defence. Armor and Conscription help offence.<br>
 • Build mines and ports for income, factories for troops, silos and airbases for long-range power.<br>
+• <b>🎯 Anti-air turrets</b> (very expensive, max 2 per province) track and shoot down enemy airlifts that fly within range.<br>
 • Research six technologies. Air Defense can intercept missiles and nukes.<br>
 • The map wraps east–west: Chukotka borders Alaska across the Bering Strait.<br>
 • Keys: <b>Space</b> pause · <b>1 2 3</b> speed · <b>Esc</b> deselect · <b>F</b> fit · right-click inspect.`;
@@ -1199,7 +1287,7 @@ function ui() {
   T.innerHTML = `<b style="color:${p.col}">${p.name}</b>
     <span class="tag">${dateStr(day)}</span>
     <span class="tag">💰 <b>$${p.money | 0}</b> (+${incT(P)}/d)</span>
-    <span class="tag">🪖 ${p.tt | 0}</span>
+    <span class="tag">🪖 ${fmtN(p.tt)}</span>
     <span class="tag">🚀${p.mis} ☢${p.nuk} ✈️${p.planes}</span>
     <span class="tag">🌍 ${own(P).length}/${WIN}</span>
     <span style="flex:1"></span>
@@ -1223,7 +1311,9 @@ function ui() {
         ${Object.keys(b).map(k => b[k] ? ICON[k] + b[k] : '').join(' ') || 'No buildings'}${r.i === O.cap ? ' · ⭐ Capital' : ''}`;
       if (r.inv.length) h += `<br>⚔ <b>Under attack</b>: ${r.inv.reduce((s, v) => s + v.n, 0) | 0} invaders`;
       if (mine) {
-        h += `<hr>` + Object.keys(COST).map(k => btn(`${ICON[k]} ${{ mine: 'Mine +$12/d', fact: 'Factory +1.3 troops/d', fort: 'Fort +40% def', silo: 'Missile silo', port: 'Port +$4/d', air: 'Airbase' }[k]} $${cost(k, r)}`, `build('${k}')`, b[k] >= 3 || p.money < cost(k, r))).join('<br>') +
+        const lbl = { mine: 'Mine +$12/d', fact: 'Factory +1.3 troops/d', fort: 'Fort +40% def', silo: 'Missile silo', port: 'Port +$4/d', air: 'Airbase', aa: 'Anti-air minigun' };
+        h += `<hr>` + Object.keys(COST).map(k => btn(`${ICON[k]} ${lbl[k]} $${cost(k, r)}`, `build('${k}')`, b[k] >= maxB(k) || p.money < cost(k, r))).join('<br>') +
+          `<br><small>🎯 Anti-air: ${b.aa}/${maxB('aa')} · shoots down enemy airlifts within range</small>` +
           `<br>${btn('🪖 +14 $52', 'recruit(14,52)', p.money < 52)}${btn('🪖 +60 $210', 'recruit(60,210)', p.money < 210)}`;
       } else {
         const src = r.nb.map(z => Rg[z[0]]).filter(x => x.o === P && x.troops >= 2).sort((x, y) => y.troops - x.troops).slice(0, 5);
@@ -1235,7 +1325,7 @@ function ui() {
         }
         if (p.planes > 0 || own(P).some(rr => rr.b.air > 0)) {
           const air = own(P).filter(x => x.troops >= 8).sort((a, b) => b.troops - a.troops).slice(0, 3);
-          if (air.length && !p.al.has(r.o)) h += `<hr><b>✈️ Airlift from</b><br>` + air.map(x => `<small>${x.nm} 🪖${x.troops | 0}</small> ${btn('Airlift', `doAir(${x.i},${r.i})`)}`).join('<br>');
+          if (air.length && !p.al.has(r.o)) h += `<hr><b>✈️ Airlift from</b>${r.b.aa ? ' <small style="color:#ff8a80">(⚠ anti-air defended)</small>' : ''}<br>` + air.map(x => `<small>${x.nm} 🪖${x.troops | 0}</small> ${btn('Airlift', `doAir(${x.i},${r.i})`)}`).join('<br>');
         }
         h += `<hr>${btn(`🚀 Missile (${p.mis})`, 'missile(0)', !p.mis)}${btn(`☢ Nuke (${p.nuk})`, 'missile(1)', !p.nuk)}<br><small>Needs one of your silos.</small>`;
       }
@@ -1247,12 +1337,12 @@ function ui() {
         const rl = c.rel[P], al = p.al.has(c.id), w = p.war.has(c.id);
         return `<div class="row"><b style="color:${c.col}">${c.name}</b> ${al ? '🤝' : w ? '⚔' : ''}${nbr.has(c.id) ? ' 📍' : ''}
           <div class="bar"><i style="width:${(rl + 100) / 2}%;background:${rl >= 38 ? '#5c8' : rl < -25 ? '#e55' : '#ca4'}"></i></div>
-          <small>trust ${rl | 0} · 🪖${c.tt | 0} · ${own(c.id).length} prov</small><br>
+          <small>trust ${rl | 0} · 🪖${fmtN(c.tt)} · ${own(c.id).length} prov</small><br>
           ${btn('🎁 $150', `dip('gift',${c.id})`, p.money < 150)}${btn('🤝', `dip('ally',${c.id})`, al || w)}${btn('🕊', `dip('peace',${c.id})`, !w)}${btn('⚔', `dip('war',${c.id})`, w)}</div>`;
       }).join('');
   } else if (tab === 2) {
     h += `<h3>Arsenal</h3>${btn('🚀 Missile $250', "buy('mis')", p.money < 250)}${btn('☢ Nuke $1750', "buy('nuk')", p.money < 1750 || !NUKES.has(p.name))}${btn('✈️ Plane $180', "buy('plane')", p.money < 180)}<br>
-      <small>Silos ${own(P).reduce((s, r) => s + r.b.silo, 0)} · Airbases ${own(P).reduce((s, r) => s + r.b.air, 0)}${NUKES.has(p.name) ? '' : ' · only nuclear powers build nukes'}</small>
+      <small>Silos ${own(P).reduce((s, r) => s + r.b.silo, 0)} · Airbases ${own(P).reduce((s, r) => s + r.b.air, 0)} · 🎯 Turrets ${own(P).reduce((s, r) => s + r.b.aa, 0)}${NUKES.has(p.name) ? '' : ' · only nuclear powers build nukes'}</small>
       <hr><h3>Research</h3>` + Object.keys(TECH).map(k => {
         const l = p.tech[k], t = TECH[k];
         return `<div class="row">${t.i} <b>${t.n}</b> <span class="pips">${'●'.repeat(l)}${'○'.repeat(3 - l)}</span><br><small>${t.d}</small><br>${btn(l >= 3 ? 'Maxed' : `Research $${TC[l]}`, `research('${k}')`, l >= 3 || p.money < TC[l])}</div>`;
@@ -1265,7 +1355,7 @@ function ui() {
     const lb = (arr, f) => arr.map((c, i) => `<div class="lb-row"><span class="lb-rank">${i + 1}</span><span class="lb-name" style="color:${c.col}">${c.name}${c.id === P ? ' ★' : ''}</span><span class="lb-val">${f(c)}</span></div>`).join('');
     h += `<h3>🏆 Rankings</h3><b>Most Territory</b>${lb(byReg.slice(0, 8), c => own(c.id).length + ' prov')}
       <hr><b>Richest</b>${lb(byCash.slice(0, 6), c => '$' + (c.money | 0))}
-      <hr><b>Strongest Army</b>${lb(byArmy.slice(0, 6), c => '⚔ ' + (str(c.id) | 0))}
+      <hr><b>Strongest Army</b>${lb(byArmy.slice(0, 6), c => '⚔ ' + fmtN(str(c.id)))}
       ${byNuk.length ? `<hr><b>Nuclear Stockpile</b>${lb(byNuk.slice(0, 5), c => '☢ ' + c.nuk)}` : ''}`;
   }
   Sd.innerHTML = h;
@@ -1352,7 +1442,7 @@ function refreshLabels() {
     if (seen[r.i]) return;
     const o = r.o, q = [r]; seen[r.i] = 1; let ar = 0, sx = 0, sy = 0, sn = 0;
     for (let h = 0; h < q.length; h++) {
-      const a = q[h]; ar += a.n; sn += a.n; sx += a.cx * a.n; sy += a.cy * a.n; // note: cx across the seam handled below
+      const a = q[h]; ar += a.n; sn += a.n; sx += a.cx * a.n; sy += a.cy * a.n;
       a.nb.forEach(([j, t]) => { if (t === 0 && !seen[j] && Rg[j].o === o) { seen[j] = 1; q.push(Rg[j]); } });
     }
     if (!best[o] || ar > best[o].ar) best[o] = { ar, q };
@@ -1367,6 +1457,138 @@ function refreshLabels() {
   }
 }
 
+// ---------- unit drawing (world space; lw = 1 screen px in world units) ----------
+function curve(m, a, b) {
+  const n = m.type === 'land' ? 1 : 26;
+  ctx.beginPath();
+  for (let i = 0; i <= n; i++) { const q = at(m, a + (b - a) * i / n); i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]); }
+  ctx.stroke();
+}
+function drawSquad(m, q, ang, lw, t, col) {
+  const cnt = clamp(Math.round(Math.sqrt(m.n) * .9), 2, 9), ca = Math.cos(ang), sa = Math.sin(ang);
+  // marching dust
+  ctx.fillStyle = '#c8b48c';
+  for (let k = 0; k < 4; k++) {
+    const u = (t * 1.3 + k / 4) % 1, bx = q[0] - ca * (6 + u * 15) * lw, by = q[1] - sa * (6 + u * 15) * lw;
+    ctx.globalAlpha = .3 * (1 - u); ctx.beginPath(); ctx.arc(bx, by, (1.4 + u * 3) * lw, 0, 7); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+  for (let i = cnt - 1; i >= 0; i--) {
+    const row = i >> 1, side = (i & 1) ? 1 : -1, fwd = -row * 4.4 * lw, lat = side * 2.7 * lw * (row ? 1 : .85);
+    const bob = Math.abs(Math.sin(t * 11 + i * 1.9)) * 1.7 * lw;
+    const x = q[0] + ca * fwd - sa * lat, y = q[1] + sa * fwd + ca * lat;
+    ctx.fillStyle = 'rgba(0,0,0,.28)'; ctx.beginPath(); ctx.ellipse(x, y + .6 * lw, 1.9 * lw, .8 * lw, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = col; ctx.strokeStyle = '#0a1420'; ctx.lineWidth = .8 * lw;
+    ctx.beginPath(); ctx.arc(x, y - bob - 1.5 * lw, 1.8 * lw, 0, 7); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#f0d5b4'; ctx.beginPath(); ctx.arc(x, y - bob - 3.9 * lw, 1.05 * lw, 0, 7); ctx.fill();
+    ctx.fillStyle = '#26323f'; ctx.beginPath(); ctx.arc(x, y - bob - 4.3 * lw, 1.1 * lw, Math.PI, 0); ctx.fill();   // helmet
+  }
+}
+function drawShip(m, q, ang, lw, t, col) {
+  const s = 9 * lw, ph = t * 2.2 + m.st * 3, roll = Math.sin(ph) * .03;
+  ctx.save(); ctx.translate(q[0], q[1]); ctx.rotate(ang + roll); ctx.scale(s, s * (1 + Math.sin(ph * 1.3) * .02));
+  // wake: expanding V and drifting foam
+  ctx.strokeStyle = '#e8f6ff'; ctx.lineCap = 'round';
+  for (const sg of [-1, 1]) {
+    ctx.globalAlpha = .38; ctx.lineWidth = .1;
+    ctx.beginPath(); ctx.moveTo(-1, sg * .22); ctx.lineTo(-3.8, sg * (1.0 + Math.sin(ph) * .05)); ctx.stroke();
+    ctx.globalAlpha = .2; ctx.beginPath(); ctx.moveTo(-1, sg * .1); ctx.lineTo(-4.4, sg * .55); ctx.stroke();
+  }
+  ctx.fillStyle = '#fff';
+  for (let k = 0; k < 7; k++) {
+    const u = (t * 1.2 + k / 7) % 1, sg = k & 1 ? 1 : -1;
+    ctx.globalAlpha = .5 * (1 - u); ctx.beginPath(); ctx.arc(-1.05 - u * 3, sg * (.15 + u * .55), .07 + u * .08, 0, 7); ctx.fill();
+  }
+  // bow wave
+  ctx.globalAlpha = .55 + Math.sin(ph * 2) * .15; ctx.lineWidth = .09;
+  ctx.beginPath(); ctx.moveTo(.75, .5); ctx.quadraticCurveTo(1.5, .15, 1.45, 0); ctx.quadraticCurveTo(1.5, -.15, .75, -.5); ctx.stroke();
+  ctx.globalAlpha = 1;
+  // hull
+  ctx.fillStyle = '#4c5b6b'; ctx.strokeStyle = '#0c1620'; ctx.lineWidth = .08;
+  ctx.beginPath(); ctx.moveTo(1.3, 0); ctx.bezierCurveTo(1.0, .22, .7, .37, .3, .37); ctx.lineTo(-.95, .37); ctx.lineTo(-1.08, .3); ctx.lineTo(-1.08, -.3); ctx.lineTo(-.95, -.37); ctx.lineTo(.3, -.37); ctx.bezierCurveTo(.7, -.37, 1.0, -.22, 1.3, 0); ctx.closePath(); ctx.fill(); ctx.stroke();
+  // deck
+  ctx.fillStyle = '#9aa7b3';
+  ctx.beginPath(); ctx.moveTo(1.12, 0); ctx.bezierCurveTo(.88, .16, .66, .27, .3, .27); ctx.lineTo(-.9, .27); ctx.lineTo(-.9, -.27); ctx.lineTo(.3, -.27); ctx.bezierCurveTo(.66, -.27, .88, -.16, 1.12, 0); ctx.fill();
+  // national stripe on the deck
+  ctx.fillStyle = col; ctx.fillRect(-.9, -.27, .22, .54);
+  // cargo containers (it carries troops)
+  ctx.fillStyle = 'rgba(40,55,70,.55)'; ctx.fillRect(-.6, -.2, .26, .17); ctx.fillRect(-.6, .03, .26, .17);
+  // forward gun
+  ctx.fillStyle = '#566676'; ctx.beginPath(); ctx.arc(.72, 0, .13, 0, 7); ctx.fill();
+  ctx.strokeStyle = '#22303c'; ctx.lineWidth = .06; ctx.beginPath(); ctx.moveTo(.72, 0); ctx.lineTo(1.05, 0); ctx.stroke();
+  // bridge + funnel
+  ctx.fillStyle = '#d4dce4'; ctx.strokeStyle = '#0c1620'; ctx.lineWidth = .05; ctx.fillRect(.1, -.17, .42, .34); ctx.strokeRect(.1, -.17, .42, .34);
+  ctx.fillStyle = '#7d8a97'; ctx.fillRect(.3, -.1, .16, .2);
+  ctx.fillStyle = '#20282f'; ctx.beginPath(); ctx.arc(-.22, 0, .13, 0, 7); ctx.fill();
+  ctx.strokeStyle = col; ctx.lineWidth = .045; ctx.beginPath(); ctx.arc(-.22, 0, .13, 0, 7); ctx.stroke();
+  // smoke
+  ctx.fillStyle = '#cfd6dc';
+  for (let k = 0; k < 4; k++) {
+    const u = (t * .8 + k / 4) % 1; ctx.globalAlpha = .3 * (1 - u);
+    ctx.beginPath(); ctx.arc(-.3 - u * 1.5, Math.sin(t * 2 + k) * .06 + u * .22, .1 + u * .2, 0, 7); ctx.fill();
+  }
+  ctx.globalAlpha = 1; ctx.restore();
+}
+function planeBody(ws) {
+  // wings
+  ctx.beginPath(); ctx.moveTo(.35, .08); ctx.lineTo(-.2, .95 * ws); ctx.lineTo(-.52, .95 * ws); ctx.lineTo(-.3, 0); ctx.lineTo(-.52, -.95 * ws); ctx.lineTo(-.2, -.95 * ws); ctx.lineTo(.35, -.08); ctx.closePath(); ctx.fill(); ctx.stroke();
+  // tailplane
+  ctx.beginPath(); ctx.moveTo(-.76, .05); ctx.lineTo(-1.04, .4 * ws); ctx.lineTo(-1.16, .4 * ws); ctx.lineTo(-1.02, 0); ctx.lineTo(-1.16, -.4 * ws); ctx.lineTo(-1.04, -.4 * ws); ctx.lineTo(-.76, -.05); ctx.closePath(); ctx.fill(); ctx.stroke();
+}
+function drawPlane(m, q, ang, p, pe, lw, t, col) {
+  const g = track(m), alt = Math.sin(Math.PI * p), s = (6.2 + 3.6 * alt) * lw;
+  // contrail
+  const step = Math.min(.03, 3.4 * lw / g.L);
+  for (let i = 1; i <= 12; i++) {
+    const a = at(m, Math.max(0, pe - (i - 1) * step)), b = at(m, Math.max(0, pe - i * step));
+    ctx.strokeStyle = `rgba(235,245,255,${.5 * (1 - i / 13)})`; ctx.lineWidth = Math.max(.4, 2.2 * (1 - i / 16)) * lw; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+  }
+  // banking from heading change
+  const bank = clamp(angDiff(hd(m, Math.max(0, pe - .02)), hd(m, Math.min(1, pe + .02))) * 16, -.75, .75), ws = Math.cos(bank) * .9 + .1;
+  // ground shadow (further away at altitude)
+  ctx.save(); ctx.translate(q[0] + alt * 7 * lw, q[1] + alt * 11 * lw); ctx.rotate(ang); ctx.scale(s * .85, s * .85);
+  ctx.fillStyle = 'rgba(0,0,0,.26)'; ctx.strokeStyle = 'rgba(0,0,0,0)'; planeBody(ws);
+  ctx.beginPath(); ctx.ellipse(0, 0, 1.1, .14, 0, 0, 7); ctx.fill(); ctx.restore();
+  // aircraft
+  ctx.save(); ctx.translate(q[0], q[1]); ctx.rotate(ang); ctx.scale(s, s);
+  ctx.fillStyle = col; ctx.strokeStyle = '#0a1420'; ctx.lineWidth = .08; planeBody(ws);
+  ctx.fillStyle = '#e9eff5';
+  ctx.beginPath(); ctx.moveTo(1.18, 0); ctx.quadraticCurveTo(.96, .17, .5, .17); ctx.lineTo(-.85, .1); ctx.lineTo(-1.1, 0); ctx.lineTo(-.85, -.1); ctx.lineTo(.5, -.17); ctx.quadraticCurveTo(.96, -.17, 1.18, 0); ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#5a86b0'; ctx.beginPath(); ctx.ellipse(.52, 0, .2, .075, 0, 0, 7); ctx.fill();   // canopy
+  ctx.restore();
+}
+function drawUnit(m, lw, t) {
+  const p = prog(m), pe = easeP(m, p), q = at(m, pe), ang = hd(m, pe), col = C[m.o].col;
+  m._x = q[0]; m._y = q[1];
+  ctx.strokeStyle = col; ctx.globalAlpha = .22; ctx.lineWidth = 1.3 * lw; ctx.setLineDash([2 * lw, 6 * lw]); curve(m, 0, 1); ctx.setLineDash([]); ctx.globalAlpha = 1;
+  if (m.type === 'plane') drawPlane(m, q, ang, p, pe, lw, t, col);
+  else if (m.type === 'ship') drawShip(m, q, ang, lw, t, col);
+  else drawSquad(m, q, ang, lw, t, col);
+}
+function drawTurret(r, k, n, lw) {
+  const T = r.tur && r.tur[k]; if (!T) return;
+  const [x, y] = turPos(r, k, n), col = C[r.o].col, s = lw;
+  ctx.save(); ctx.translate(x, y);
+  ctx.fillStyle = '#18222d'; ctx.strokeStyle = col; ctx.lineWidth = 1.5 * s; ctx.beginPath(); ctx.arc(0, 0, 5.4 * s, 0, 7); ctx.fill(); ctx.stroke();
+  ctx.rotate(T.a);
+  for (let i = 0; i < 3; i++) { const off = Math.sin(T.sp + i * 2.094) * 1.5 * s; ctx.fillStyle = '#aebccb'; ctx.fillRect(1.5 * s, off - .5 * s, 8.5 * s, 1 * s); }
+  ctx.fillStyle = '#c3ccd6'; ctx.fillRect(9 * s, -2 * s, 1.4 * s, 4 * s);   // barrel clamp
+  ctx.fillStyle = '#3c4d5f'; ctx.beginPath(); ctx.arc(0, 0, 3.5 * s, 0, 7); ctx.fill();
+  ctx.fillStyle = col; ctx.fillRect(-3 * s, -1 * s, 3.4 * s, 2 * s);
+  if (T.fl > 0) { ctx.fillStyle = `rgba(255,222,130,${T.fl})`; ctx.beginPath(); ctx.arc(11.5 * s, 0, (1.6 + T.fl * 2.4) * s, 0, 7); ctx.fill(); }
+  ctx.restore();
+}
+function pill(x, y, w, h, r) { ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(x, y, w, h, r); else ctx.rect(x, y, w, h); }
+// small sign: icon + compact number (screen space)
+function sign(x, y, ic, txt, col, uy) {
+  const s = ic + ' ' + txt; ctx.font = '600 9.5px system-ui'; const w = ctx.measureText(s).width + 9;
+  if (uy !== undefined) { ctx.strokeStyle = 'rgba(220,235,250,.5)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x, y + 7); ctx.lineTo(x, uy); ctx.stroke(); }
+  ctx.fillStyle = 'rgba(8,18,30,.88)'; pill(x - w / 2, y - 7, w, 14, 4); ctx.fill();
+  ctx.strokeStyle = col; ctx.lineWidth = 1.2; ctx.stroke();
+  ctx.fillStyle = '#fff'; ctx.fillText(s, x, y + .5);
+}
+
 function draw(dt, t) {
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.fillStyle = '#07233c'; ctx.fillRect(0, 0, cw, ch);
@@ -1378,6 +1600,9 @@ function draw(dt, t) {
   for (let k = -1; vx + k * Wz < cw; k++) if (vx + k * Wz + Wz > 0) tiles.push(vx + k * Wz);
   ctx.imageSmoothingEnabled = true;
   for (const ox of tiles) ctx.drawImage(oceanCv, ox, vy, Wz, Hz);
+  ctx.globalAlpha = .07;   // slow shimmer
+  for (const ox of tiles) ctx.drawImage(oceanCv, ox + Math.sin(t * .3) * 5, vy + Math.cos(t * .23) * 4, Wz, Hz);
+  ctx.globalAlpha = 1;
   // graticule
   ctx.strokeStyle = 'rgba(255,255,255,.045)'; ctx.lineWidth = 1; ctx.beginPath();
   for (const ox of tiles) {
@@ -1392,54 +1617,30 @@ function draw(dt, t) {
   for (const ox of tiles) {
     ctx.setTransform(dpr * z, 0, 0, dpr * z, dpr * ox, dpr * vy);
     ctx.lineCap = 'round';
-    for (const m of M) {
-      const f = Rg[m.f], e = Rg[m.t], ex = f.cx + wdx(f.cx, e.cx), p = Math.min(1, (gt - m.st) / (m.arr - m.st));
-      const x = f.cx + (ex - f.cx) * p, y = f.cy + (e.cy - f.cy) * p, col = C[m.o].col, ang = Math.atan2(e.cy - f.cy, ex - f.cx);
-      // path trail
-      ctx.strokeStyle = col; ctx.globalAlpha = .45; ctx.lineWidth = (m.type === 'plane' ? 1.4 : 2.2) * lw;
-      ctx.setLineDash(m.type === 'ship' ? [6 * lw, 5 * lw] : m.type === 'plane' ? [3 * lw, 5 * lw] : []);
-      ctx.beginPath(); ctx.moveTo(f.cx, f.cy); ctx.lineTo(ex, e.cy); ctx.stroke(); ctx.setLineDash([]);
-      // progress trail (brighter segment already covered)
-      ctx.globalAlpha = .75; ctx.lineWidth = (m.type === 'plane' ? 1.8 : 2.6) * lw;
-      ctx.beginPath(); ctx.moveTo(f.cx, f.cy); ctx.lineTo(x, y); ctx.stroke();
-      ctx.globalAlpha = 1;
-      // unit marker
-      ctx.fillStyle = col; ctx.strokeStyle = '#0a1420'; ctx.lineWidth = 1.4 * lw;
-      if (m.type === 'plane') {
-        const s = 8 * lw;
-        ctx.beginPath();
-        ctx.moveTo(x + Math.cos(ang) * s, y + Math.sin(ang) * s);
-        ctx.lineTo(x + Math.cos(ang + 2.4) * s * .7, y + Math.sin(ang + 2.4) * s * .7);
-        ctx.lineTo(x + Math.cos(ang) * s * .15, y + Math.sin(ang) * s * .15);
-        ctx.lineTo(x + Math.cos(ang - 2.4) * s * .7, y + Math.sin(ang - 2.4) * s * .7);
-        ctx.closePath(); ctx.fill(); ctx.stroke();
-      } else if (m.type === 'ship') {
-        const s = 7 * lw;
-        ctx.beginPath();
-        ctx.moveTo(x + Math.cos(ang) * s, y + Math.sin(ang) * s);
-        ctx.lineTo(x + Math.cos(ang + 2.2) * s * .85, y + Math.sin(ang + 2.2) * s * .85);
-        ctx.lineTo(x - Math.cos(ang) * s * .5, y - Math.sin(ang) * s * .5);
-        ctx.lineTo(x + Math.cos(ang - 2.2) * s * .85, y + Math.sin(ang - 2.2) * s * .85);
-        ctx.closePath(); ctx.fill(); ctx.stroke();
-      } else {
-        const s = 7.5 * lw;
-        ctx.beginPath();
-        ctx.moveTo(x + Math.cos(ang) * s, y + Math.sin(ang) * s);
-        ctx.lineTo(x + Math.cos(ang + 2.5) * s, y + Math.sin(ang + 2.5) * s);
-        ctx.lineTo(x + Math.cos(ang - 2.5) * s, y + Math.sin(ang - 2.5) * s);
-        ctx.closePath(); ctx.fill(); ctx.stroke();
+    // anti-air range of the selected province
+    if (sel >= 0 && Rg[sel].b.aa > 0 && Rg[sel].o === P) {
+      const r = Rg[sel]; ctx.strokeStyle = 'rgba(120,220,255,.5)'; ctx.fillStyle = 'rgba(120,220,255,.05)'; ctx.lineWidth = 1.2 * lw; ctx.setLineDash([6 * lw, 5 * lw]);
+      ctx.beginPath(); ctx.arc(r.cx, r.cy, AA_R, 0, 7); ctx.fill(); ctx.stroke(); ctx.setLineDash([]);
+    }
+    // contested provinces: ring + flickering muzzle sparks
+    for (const r of Rg) if (r.inv.length) {
+      const rr = Math.max(7, Math.min(24, Math.sqrt(r.n / Math.PI) * .5));
+      ctx.strokeStyle = 'rgba(255,70,60,.85)'; ctx.lineWidth = 1.5 * lw; ctx.setLineDash([4 * lw, 3 * lw]);
+      ctx.beginPath(); ctx.arc(r.cx, r.cy, rr, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+      if (settings.effects) for (let k = 0; k < 3; k++) {
+        const a = t * 6 + k * 2.1 + r.i, f = (Math.sin(t * 13 + k * 5 + r.i) + 1) / 2;
+        if (f > .62) { ctx.strokeStyle = `rgba(255,${190 + k * 20},90,${f})`; ctx.lineWidth = 1.3 * lw; ctx.beginPath(); ctx.moveTo(r.cx + Math.cos(a) * rr * .3, r.cy + Math.sin(a) * rr * .3); ctx.lineTo(r.cx + Math.cos(a) * rr * 1.1, r.cy + Math.sin(a) * rr * 1.1); ctx.stroke(); }
       }
-      // troop count badge when zoomed in
-      if (z > 1.1) {
-        const label = String(m.n | 0);
-        ctx.font = `bold ${Math.max(9, 11 * Math.min(1.4, z * .55)) | 0}px system-ui`;
-        const tw = ctx.measureText(label).width + 6;
-        const bx = x + Math.cos(ang + 1.5) * 10 * lw, by = y + Math.sin(ang + 1.5) * 10 * lw;
-        ctx.fillStyle = 'rgba(8,18,30,.88)'; ctx.fillRect(bx - tw / 2, by - 7, tw, 14);
-        ctx.strokeStyle = col; ctx.lineWidth = 1; ctx.strokeRect(bx - tw / 2, by - 7, tw, 14);
-        ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.fillText(label, bx, by + .5);
-      }
+    }
+    // turrets (under the aircraft)
+    for (const r of Rg) if (r.tur) for (let k = 0; k < r.tur.length; k++) drawTurret(r, k, r.tur.length, lw);
+    // ground units, then ships, then planes on top
+    for (const ty of ['land', 'ship', 'plane']) for (const m of M) if (m.type === ty) drawUnit(m, lw, t);
+    // minigun tracers
+    for (const b of bul) {
+      ctx.strokeStyle = `rgba(255,236,170,${1 - b.t / .1})`; ctx.lineWidth = 1.3 * lw;
+      const u = Math.min(1, b.t / .1), x1 = b.x1 + (b.x2 - b.x1) * Math.max(0, u - .5), y1 = b.y1 + (b.y2 - b.y1) * Math.max(0, u - .5), x2 = b.x1 + (b.x2 - b.x1) * Math.min(1, u + .3), y2 = b.y1 + (b.y2 - b.y1) * Math.min(1, u + .3);
+      ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
     }
     for (const f of fx) {
       const p = Math.min(1, f.t / f.d), hh = f.k === 'n' ? 60 : 32;
@@ -1449,14 +1650,15 @@ function draw(dt, t) {
       ctx.stroke();
       ctx.fillStyle = f.k === 'n' ? '#ffd070' : '#fff'; ctx.beginPath(); ctx.arc(px, py, (f.k === 'n' ? 3.6 : 2.4) * lw * 1.4, 0, 7); ctx.fill();
     }
+    // particles (sparks, smoke)
+    for (const q of parts) {
+      const u = q.t / q.d; ctx.globalAlpha = Math.max(0, 1 - u) * .85; ctx.fillStyle = q.col;
+      ctx.beginPath(); ctx.arc(q.x, q.y, q.r * (1 + q.grow * u) * lw, 0, 7); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
     for (const q of rings) {
       const p = q.t / q.d; ctx.strokeStyle = q.col; ctx.globalAlpha = (1 - p) * .85; ctx.lineWidth = 2 * lw;
       ctx.beginPath(); ctx.arc(q.x, q.y, q.R * Math.sqrt(p), 0, 7); ctx.stroke(); ctx.globalAlpha = 1;
-    }
-    // contested provinces
-    for (const r of Rg) if (r.inv.length) {
-      ctx.strokeStyle = 'rgba(255,70,60,.9)'; ctx.lineWidth = 1.6 * lw; ctx.setLineDash([4 * lw, 3 * lw]);
-      ctx.beginPath(); ctx.arc(r.cx, r.cy, Math.max(7, Math.min(24, Math.sqrt(r.n / Math.PI) * .5)), 0, 7); ctx.stroke(); ctx.setLineDash([]);
     }
     // selection ring
     if (sel >= 0) {
@@ -1490,15 +1692,22 @@ function draw(dt, t) {
     for (const r of Rg) {
       const show = r.i === sel || r.inv.length || (z > 1.7 && r.n * z * z > 650);
       if (!show) continue;
-      const x = r.cx * z + ox, y = r.cy * z + vy + 12; if (x < -40 || x > cw + 40 || y < -20 || y > ch + 20) continue;
-      const s = String(r.troops | 0); ctx.font = 'bold 11px system-ui'; const tw = ctx.measureText(s).width + 9;
-      ctx.fillStyle = 'rgba(8,18,30,.84)'; ctx.fillRect(x - tw / 2, y - 8, tw, 16);
-      ctx.strokeStyle = C[r.o].col; ctx.lineWidth = 1.2; ctx.strokeRect(x - tw / 2, y - 8, tw, 16);
-      ctx.fillStyle = '#fff'; ctx.fillText(s, x, y + .5);
-      if (z > 3.2) { const bs = Object.keys(r.b).map(k => r.b[k] ? ICON[k] + r.b[k] : '').join(''); if (bs) { ctx.font = '10px system-ui'; ctx.fillText(bs, x, y + 15); } }
-      if (r.inv.length) { ctx.font = '13px system-ui'; ctx.fillText('⚔', x, y - 14); }
+      const x = r.cx * z + ox, y = r.cy * z + vy + 14; if (x < -40 || x > cw + 40 || y < -20 || y > ch + 20) continue;
+      sign(x, y, '🪖', fmtN(r.troops), C[r.o].col);
+      if (z > 3.2) { const bs = Object.keys(r.b).map(k => r.b[k] ? ICON[k] + r.b[k] : '').join(''); if (bs) { ctx.font = '10px system-ui'; ctx.fillStyle = '#fff'; ctx.fillText(bs, x, y + 15); } }
+      if (r.inv.length) sign(x, y - 17, '⚔', fmtN(r.inv.reduce((s, v) => s + v.n, 0)), '#ff6a5a');
+    }
+    // signs over moving groups: small icon + compact count, on a short pole
+    for (const m of M) {
+      if (m._x === undefined || !(m.o === P || z > .8)) continue;
+      const lift = m.type === 'plane' ? 24 : m.type === 'ship' ? 18 : 20, x = m._x * z + ox, uy = m._y * z + vy;
+      if (x < -40 || x > cw + 40 || uy < -30 || uy > ch + 30) continue;
+      sign(x, uy - lift, m.type === 'plane' ? '✈' : m.type === 'ship' ? '⚓' : '🪖', fmtN(m.n), C[m.o].col, uy - (m.type === 'plane' ? 8 : 5));
     }
   }
+  // soft vignette
+  const vg = ctx.createRadialGradient(cw / 2, ch / 2, Math.min(cw, ch) * .45, cw / 2, ch / 2, Math.max(cw, ch) * .75);
+  vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(2,8,16,.38)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, cw, ch);
   if (flash > 0) { ctx.fillStyle = `rgba(255,255,255,${flash * .6})`; ctx.fillRect(0, 0, cw, ch); flash -= dt * 1.3; }
   if (miniDirty || frameN % 12 === 0) drawMini();
 }
@@ -1528,7 +1737,7 @@ function bindInput() {
       const t = $('#tip');
       if (h >= 0) {
         const r = Rg[h], o = C[r.o];
-        let s = `<b>${r.nm}</b><br>${o.name} · 🪖${r.troops | 0}<br><small>${r.terr.n} · def ×${defm(r).toFixed(2)}</small>`;
+        let s = `<b>${r.nm}</b><br>${o.name} · 🪖${r.troops | 0}${r.b.aa ? ` · 🎯${r.b.aa}` : ''}<br><small>${r.terr.n} · def ×${defm(r).toFixed(2)}</small>`;
         if (P === null) s += `<br><small>Power ${o.pw}/5 · ${own(r.o).length} provinces</small>`;
         if (P !== null && sel >= 0 && Rg[sel].o === P && r.o !== P && Rg[sel].nb.some(z => z[0] === h)) {
           const n = Rg[sel].troops * frac * (1 + .08 * tl(P, 'arm')), e2 = r.troops * defm(r), q = n / e2;
@@ -1571,14 +1780,19 @@ function click(sx, sy) {
 let last = 0, T0 = 0;
 function loop(n) {
   const dt = Math.min(.1, (n - last) / 1000); last = n; T0 += dt; frameN++;
-  if (speed && !over && !modal && P !== null) {
-    gt += dt * speed / 1.05;
+  const running = speed && !over && !modal && P !== null, dg = running ? dt * speed / 1.05 : 0;
+  if (running) {
+    gt += dg;
     for (let i = M.length - 1; i >= 0; i--) if (M[i].arr <= gt) { arrive(M[i]); M.splice(i, 1); }
     while (day < Math.floor(gt)) daily();
   }
-  if (!modal || true) {
-    for (let i = fx.length - 1; i >= 0; i--) { const f = fx[i]; f.t += dt; if (f.t >= f.d) { fx.splice(i, 1); f.cb && f.cb(); } }
-    for (let i = rings.length - 1; i >= 0; i--) { rings[i].t += dt; if (rings[i].t >= rings[i].d) rings.splice(i, 1); }
+  updateTurrets(dg, dt);
+  for (let i = fx.length - 1; i >= 0; i--) { const f = fx[i]; f.t += dt; if (f.t >= f.d) { fx.splice(i, 1); f.cb && f.cb(); } }
+  for (let i = rings.length - 1; i >= 0; i--) { rings[i].t += dt; if (rings[i].t >= rings[i].d) rings.splice(i, 1); }
+  for (let i = bul.length - 1; i >= 0; i--) { bul[i].t += dt; if (bul[i].t >= .1) bul.splice(i, 1); }
+  for (let i = parts.length - 1; i >= 0; i--) {
+    const q = parts[i]; q.t += dt; q.x += q.vx * dt / z; q.y += q.vy * dt / z; q.vx *= .97; q.vy *= .97;
+    if (q.t >= q.d) parts.splice(i, 1);
   }
   draw(dt, T0);
   requestAnimationFrame(loop);
@@ -1589,8 +1803,8 @@ function init() {
     dirtyAll = 1; resize(); fit(); bindInput(); ready = true; ui();
     $('#load').style.display = 'none';
     log('Pick your nation by clicking it.', 'n');
-    ask('🌍 World at War 5',
-      `A rebuilt world: Miller projection, natural coastlines, biomes and mountain relief, organic country borders, and provinces carved from real geography.<br>
+    ask('🌍 World at War 6',
+      `Marching squads, banking aircraft, real warships and new <b>🎯 Anti-air</b> turrets that rip enemy airlifts out of the sky.<br>
       Terrain changes how battles are fought. Research technologies, build an economy, and out-manoeuvre rivals.<br>
       Difficulty only changes how often AI nations act. Then click a country.<br>
       <small>Scroll = zoom · drag = pan · right-click = inspect · ⚙️ = settings</small>`,
